@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from functions.beamSuperposition import beamSuperposition
+from functions.beamSuperposition import *
 
 
 def beamPlot(beamLength, loadPositions, loadForces, beamSupport):

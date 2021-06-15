@@ -1,5 +1,5 @@
-
 import numpy as np
+
 def beamDeflection(positions, beamLength, loadPosition, loadForce, beamSupport):
     # initial constants
     E = 200*10**9 # Newton per meters squared

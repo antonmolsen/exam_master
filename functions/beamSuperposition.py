@@ -1,5 +1,5 @@
 import numpy as np
-from beamDeflection import beamDeflection
+from functions.beamDeflection import beamDeflection
 
 
 def beamSuperposition(positions, beamLength, loadPositions, loadForces, beamSupport):
