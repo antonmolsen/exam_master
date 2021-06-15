@@ -49,15 +49,25 @@ while True:
         if mainChoice == 2: # Configure loads
             while True:
                 loadItems = np.array(["See current loads", "Add a load", "Remove a load", "Go to main menu"])
-                print("what do you wish to do ?")
+                print("What do you wish to do?")
                 loadChoice = displayMenu(loadItems)
 
                 if loadChoice == 1: # See current loads
                     if sum(df.loadPosition) == 0:
-                        print("There are currently no load forces on the beam")
+                        print("There are currently no load forces on the beam.")
                         pass
                     else:
-                        print("current loads and forces are \n")
+                        print("The current loads and forces are: \n")
+                        
+                        temp = {'':[],'Forces [N]':[], 'Positions [m]':[]}
+                        weights = pd.DataFrame(data = temp)
+                        lPositions = np.array(df.loadPosition)
+                        fVal = np.array(df.forceVal)
+                        
+                        for i in range(np.size(lPositions)):
+                            weights = weights.append({'':'W{}'.format(i + 1),'Forces [N]':fVal[i], 'Positions [m]':lPositions[i]}, ignore_index=True)
+                        
+                        print(weights.to_string(index = False),'\n')
 
                         # PRINT DATFRAME HERE
 
