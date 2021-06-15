@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 from functions.beamDeflection import beamSuperposition
 
 
@@ -6,7 +7,7 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
     positions = np.arange(0, beamLength, 200)
     height = beamSuperposition(positions, beamLength, loadPositions, loadForces, beamSupport)
 
-    plt.plot(position, height, or --)
+    plt.plot(positions, height, 'or--')
     for i in range(np.size(loadPositions)):
         loadHeight = beamSuperposition(
             np.array([loadPositions[i]]), beamLength, loadPositions, loadForces, beamSupport)
