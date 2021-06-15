@@ -12,120 +12,128 @@ from functions.beamPlot import beamPlot
 # can only run one beam at a time
 
 # Initial conditions
-#empty dataframe as initial
 df = pd.DataFrame({"loadPosition": [],
       "forceVal": []})
-
+beamLength = 0
 
 while True:
     menuItems = np.array(["Configure beam", "Configure loads", "Save beam and loads", "Load beam and loads", "Generate plot", "Quit"])
     mainChoice = displayMenu(menuItems)
 
-    if mainChoice == 1: # Configure beam
-        while True:
-            try:
-                beamLength = float(input("Please enter the length of beam in meters: "))
+    try:
+        if mainChoice > 1 and beamLength == 0:
+            raise
 
-                if beamLength <= 0:
-                    raise
-                supportItems = np.array(["both", "cantilever"])
-                supportChoice = displayMenu(supportItems)
-                if supportChoice == 1:
-                    beamSupport = "both"
-                elif supportChoice == 2:
-                    beamSupport = "cantilever"
-                break
-            except:
-                print("Beam must be a positive value. Please try again")
 
-        print("Beam loaded")
-        #first row of dataframe is reserved for beam information
 
-    if mainChoice == 2: # Configure loads
-        while True:
-            loadItems = np.array(["See current loads", "Add a load", "Remove a load", "Go to main menu"])
-            print("what do you wish to do ?")
-            loadChoice = displayMenu(loadItems)
+        if mainChoice == 1: # Configure beam
+            while True:
+                try:
+                    beamLength = float(input("Please enter the length of beam in meters: "))
 
-            if loadChoice == 1: # See current loads
-                if sum(df.loadPosition) == 0:
-                    print("There are currently no load forces on the beam")
-                    pass
-                else:
-                    print("current loads and forces are \n")
+                    if beamLength <= 0:
+                        raise
+                    supportItems = np.array(["both", "cantilever"])
+                    supportChoice = displayMenu(supportItems)
+                    if supportChoice == 1:
+                        beamSupport = "both"
+                    elif supportChoice == 2:
+                        beamSupport = "cantilever"
+                    break
+                except:
+                    print("Beam must be a positive value. Please try again")
 
-                    # PRINT DATFRAME HERE
+            print("Beam loaded")
+            #first row of dataframe is reserved for beam information
 
-            if loadChoice == 2: # Add a load
-                while True:
-                    try:
-                        load_pos = float(inputNumber("Enter position of load in meters (beam is {} meters): ".format(beamLength)))
-                        force_val = float(inputNumber("Enter the force at the position: "))
-                        if load_pos < 0 : # must not be longer than length of beam
-                            raise
-                        # load position and load force is appended to df
-                        df = df.append({"loadPosition": load_pos, "forceVal": force_val}, ignore_index=True)
-                        break
-                    except:
-                        print("Your load position can not be lower than 0. ")
+        if mainChoice == 2: # Configure loads
+            while True:
+                loadItems = np.array(["See current loads", "Add a load", "Remove a load", "Go to main menu"])
+                print("what do you wish to do ?")
+                loadChoice = displayMenu(loadItems)
 
-            if loadChoice == 3: # Remove a load
-                #prints dataframe and the user can select which line to remove
-
-                while True:
-                    try:
-
-                        force_val = inputNumber("Enter the force at the position: ")
-
-                        if len(df.loadPosition) == 0:
-                            raise
-                        break
-                    except:
+                if loadChoice == 1: # See current loads
+                    if sum(df.loadPosition) == 0:
                         print("There are currently no load forces on the beam")
+                        pass
+                    else:
+                        print("current loads and forces are \n")
 
-            if loadChoice == 4: # Go to main menu
-                break
+                        # PRINT DATFRAME HERE
 
-    if mainChoice == 3: # Save beam and loads
+                if loadChoice == 2: # Add a load
+                    while True:
+                        try:
+                            load_pos = float(inputNumber("Enter position of load in meters (beam is {} meters): ".format(beamLength)))
+                            force_val = float(inputNumber("Enter the force at the position: "))
+                            if load_pos < 0 : # must not be longer than length of beam
+                                raise
+                            # load position and load force is appended to df
+                            df = df.append({"loadPosition": load_pos, "forceVal": force_val}, ignore_index=True)
+                            break
+                        except:
+                            print("Your load position can not be lower than 0. ")
 
-        # ADD BEAM INFO TO ARRAY
-        saving_filename = input("What do you wish to name your file ?: ")
+                if loadChoice == 3: # Remove a load
+                    #prints dataframe and the user can select which line to remove
 
-        #file shall not overwrite old file
+                    while True:
+                        try:
 
-        s = df.to_csv(index=False)
-        f = open("beam_and_support_data.csv", "w") #write
-        f.write(s)
-        f.close()
-        #print("file saved as {} in {}".format(saving_filename, cd))
+                            force_val = inputNumber("Enter the force at the position: ")
+
+                            if len(df.loadPosition) == 0:
+                                raise
+                            break
+                        except:
+                            print("There are currently no load forces on the beam")
+
+                if loadChoice == 4: # Go to main menu
+                    break
+
+        if mainChoice == 3: # Save beam and loads
+
+            # ADD BEAM INFO TO ARRAY
+            saving_filename = input("What do you wish to name your file ?: ")
+
+            #file shall not overwrite old file
+
+            s = df.to_csv(index=False)
+            f = open("beam_and_support_data.csv", "w") #write
+            f.write(s)
+            f.close()
+            #print("file saved as {} in {}".format(saving_filename, cd))
 
 
 
-    if mainChoice == 4: # Load beam and loads
+        if mainChoice == 4: # Load beam and loads
 
-        # REMEBER TO EXTRACT BEAMLENGTH AND BEAMSUPPORT AND CREATE 2xN ARRAY
+            # REMEBER TO EXTRACT BEAMLENGTH AND BEAMSUPPORT AND CREATE 2xN ARRAY
 
 
-        load_filename = input("Please enter the csv file you wish to load")
+            load_filename = input("Please enter the csv file you wish to load")
 
-        df = pd.read_csv(load_filename)
+            df = pd.read_csv(load_filename)
 
-        #use dataload funktion
+            #use dataload funktion
 
-        print("Data loaded")
+            print("Data loaded")
 
-        "cantilever"
-    if mainChoice == 5: # Generate plot
-        beamPlot(beamLength, np.array(df.loadPosition), np.array(df.forceVal), beamSupport)
-        
-        # beamPlot(beamLength, ) runs here
-        #ekstra plot function ?
-        #print list of current forces in console
+            "cantilever"
+        if mainChoice == 5: # Generate plot
+            beamPlot(beamLength, np.array(df.loadPosition), np.array(df.forceVal), beamSupport)
 
-        print("Beam plot created succesfully")
+            # beamPlot(beamLength, ) runs here
+            #ekstra plot function ?
+            #print list of current forces in console
 
-    if mainChoice == 6: # exits program
-        print("Program closed")
-        break
+            print("Beam plot created succesfully")
+
+        if mainChoice == 6: # exits program
+            print("Program closed")
+            break
+
+    except:
+        print("Please configure beam. ")
 
 
