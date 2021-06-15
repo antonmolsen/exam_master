@@ -13,8 +13,8 @@ from functions.beamPlot import beamPlot
 
 # Initial conditions
 #empty dataframe as initial
-df = pd.DataFrame({"loadPosition": [0],
-      "forcePosition": [0]})
+df = pd.DataFrame({"loadPosition": [],
+      "forceVal": []})
 
 
 while True:
@@ -31,15 +31,12 @@ while True:
                 supportItems = np.array(["both", "cantilever"])
                 supportChoice = displayMenu(supportItems)
                 if supportChoice == 1:
-                    support = "both"
+                    beamSupport = "both"
                 elif supportChoice == 2:
-                    support = "cantilever"
+                    beamSupport = "cantilever"
                 break
             except:
                 print("Beam must be a positive value. Please try again")
-
-        # beamLength in meters
-        # beamSupport string
 
         print("Beam loaded")
         #first row of dataframe is reserved for beam information
@@ -67,7 +64,7 @@ while True:
                         if load_pos < 0 : # must not be longer than length of beam
                             raise
                         # load position and load force is appended to df
-                        df = df.append({"loadPosition": load_pos, "forcePosition": force_val}, ignore_index=True)
+                        df = df.append({"loadPosition": load_pos, "forceVal": force_val}, ignore_index=True)
                         break
                     except:
                         print("Your load position can not be lower than 0. ")
@@ -119,7 +116,7 @@ while True:
 
         "cantilever"
     if mainChoice == 5: # Generate plot
-        beamPlot(beamLength, np.array(df.loadPosition), np.array(df.loadForce), beamSupport)
+        beamPlot(beamLength, np.array(df.loadPosition), np.array(df.forceVal), beamSupport)
         
         # beamPlot(beamLength, ) runs here
         #ekstra plot function ?
