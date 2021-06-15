@@ -23,8 +23,8 @@ def beamDeflection(positions, beamLength, loadPosition, loadForce, beamSupport):
         deflection = np.concatenate((y_within_l,y_outer_l))
 
     elif beamSupport == "cantilever":
-        y_within_l = ((W * x ** 2) / (6 * E * I)) * (3 * a - x)
-        y_outer_l = ((W * x ** 2) / (6 * E * I)) * (3 * a - x)
+        y_within_l = ((W * less_a_pos ** 2) / (6 * E * I)) * (3 * a - less_a_pos)
+        y_outer_l = ((W * geq_a_pos ** 2) / (6 * E * I)) * (3 * geq_a_pos - a)
 
         deflection = np.concatenate((y_within_l, y_outer_l))
 
