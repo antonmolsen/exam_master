@@ -11,7 +11,7 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
     maxHeight = max(height)
     dHeigth = maxHeight - minHeight
     
-    temp = {'Forces [N]':[], 'Positions [m]':[]}
+    temp = {'':[],'Forces [N]':[], 'Positions [m]':[]}
     weights = pd.DataFrame(data = temp)
     
     plt.plot(positions, height, 'r-')
@@ -21,7 +21,7 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
         plt.arrow(loadPositions[i], loadHeight[0] - minHeight*0.1, 0, minHeight*0.05, head_width=beamLength*0.02, head_length=abs(minHeight*0.03))
         plt.text(loadPositions[i] - beamLength*(0.02), loadHeight[0] - minHeight*0.15, r'$W_{{{}}}$'.format(i + 1))
         
-        weights = weights.append({'Forces [N]':loadForces[i], 'Positions [m]':loadPositions[i]}, ignore_index=True)
+        weights = weights.append({'':'W{}'.format(i + 1),'Forces [N]':loadForces[i], 'Positions [m]':loadPositions[i]}, ignore_index=True)
 
     
     plt.title('Beam under load with support type: {:s}'.format(beamSupport))
@@ -30,7 +30,6 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
     plt.xlabel('Length [m]')
     plt.ylabel('Deflection [m]')
     plt.show()
-    weights.index += 1
-    print(weights)
+    print(weights.to_string(index = False))
     
     
