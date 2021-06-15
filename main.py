@@ -56,7 +56,7 @@ while True:
                         load_pos = inputNumber("Enter position of load in meters: ")
                         force_val = inputNumber("Enter the force at the position: ")
 
-                        if load_pos < 0 or load_pos > #beamkength :
+                        if load_pos < 0 or load_pos > df.iloc[0,0]: # must not be longer than length of beam
                             raise
 
                         # load position and load force is appended to df
@@ -69,24 +69,21 @@ while True:
 
 
 
-
                 while True:
                     try:
 
                         force_val = inputNumber("Enter the force at the position: ")
 
-                        if len(loadPosition) == 0:
+                        if len(df.loadPosition) == 0:
                             raise
                         break
                     except:
                         print("There are currently no load forces on the beam")
 
-
-
-
-
     if mainChoice == 3: # Save beam and loads
         saving_filename = input("What do you wish to name your file ?: ")
+
+        #file shall not overwrite old file
 
         s = df.to_csv(index=False)
         f = open("beam_and_support_data.csv", "w") #write
