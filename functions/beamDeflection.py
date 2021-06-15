@@ -1,8 +1,6 @@
+
 import numpy as np
 def beamDeflection(positions, beamLength, loadPosition, loadForce, beamSupport):
-    # Calculation of beamDeflection
-
-
     # initial constants
     E = 200*10**9 # Newton per meters squared
     I = 1*10**(-3) # Meters to the fourth power
@@ -13,28 +11,22 @@ def beamDeflection(positions, beamLength, loadPosition, loadForce, beamSupport):
     a = loadPosition # meters
     W = loadForce # newton
 
-    #initial list of deflection-values is empty
-
-    deflection = []
+    less_a_pos = x[positions < a]
+    geq_a_pos = x[positions >= a]
 
     if beamSupport == "both":
-        for i in range(np.size(positions)):
-            if x[i] < a:
-                y = (W * (l - a) * x[i] / (6 * E * I * l)) * (l ** 2 - x[i] ** 2 - (l - a) ** 2)
-                deflection.append(y)
+        #we sort in values lower than a or greater than or equal to a
 
-            elif x[i] >= a:
-                y = (W * a * (l - x[i]) / (6 * E * I * l)) * (l ** 2 - (l - x[i]) ** 2 - a ** 2)
-                deflection.append(y)
+        y_within_l = (W * (l - a) * less_a_pos / (6 * E * I * l)) * (l ** 2 - less_a_pos ** 2 - (l - a) ** 2)
+        y_outer_l = (W * a * (l - geq_a_pos) / (6 * E * I * l)) * (l ** 2 - (l - geq_a_pos) ** 2 - a ** 2)
+
+        deflection = np.concatenate((y_within_l,y_outer_l))
 
     elif beamSupport == "cantilever":
-        for i in range(np.size(positions)):
-            if x[i] < a:
-                y = ((W * x[i] ** 2) / (6 * E * I)) * (3 * a - x[i])
-                deflection.append(y)
+        y_within_l = ((W * x ** 2) / (6 * E * I)) * (3 * a - x)
+        y_outer_l = ((W * x ** 2) / (6 * E * I)) * (3 * a - x)
 
-            elif x[i] >= a:
-                y = ((W * x[i] ** 2) / (6 * E * I)) * (3 * a - x[i])
-                deflection.append(y)
+        deflection = np.concatenate((y_within_l, y_outer_l))
 
-    return np.array(deflection)
+    return deflection
+
