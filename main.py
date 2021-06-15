@@ -104,6 +104,8 @@ while True:
 
         "cantilever"
     if mainChoice == 5: # Generate plot
+        beamPlot(beamLength, np.array(df.loadPosition), np.array(df.loadForce), beamSupport)
+        
         # beamPlot(beamLength, ) runs here
         #ekstra plot function ?
         #print list of current forces in console
