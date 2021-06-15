@@ -13,36 +13,45 @@ from functions.beamPlot import beamPlot
 
 # Initial conditions
 #empty dataframe as initial
-df = pd.DataFrame({"lengthBeam":  [0],
-      "supportBeam": [0],
-      "loadPosition": [],
-      "forcePosition": []})
+df = pd.DataFrame({"loadPosition": [0],
+      "forcePosition": [0]})
+
 
 while True:
     menuItems = np.array(["Configure beam", "Configure loads", "Save beam and loads", "Load beam and loads", "Generate plot", "Quit"])
     mainChoice = displayMenu(menuItems)
 
     if mainChoice == 1: # Configure beam
-        length_current_beam = input("Please enter the length of beam in meters")
-        supportItems = np.array(["both", "cantilever"])
-        supportChoice = displayMenu(supportItems)
-        if supportChoice == 1:
-            support = "both"
-        elif supportChoice == 2:
-            support = "cantilever"
+        while True:
+            try:
+                beamLength = float(input("Please enter the length of beam in meters: "))
 
-        df.iloc[0,0] = length_current_beam
-        df.iloc[1,0] = support
+                if beamLength <= 0:
+                    raise
+                supportItems = np.array(["both", "cantilever"])
+                supportChoice = displayMenu(supportItems)
+                if supportChoice == 1:
+                    support = "both"
+                elif supportChoice == 2:
+                    support = "cantilever"
+                break
+            except:
+                print("Beam must be a positive value. Please try again")
+
+        # beamLength in meters
+        # beamSupport string
+
+        print("Beam loaded")
         #first row of dataframe is reserved for beam information
 
     if mainChoice == 2: # Configure loads
         while True:
-            loadItems = np.array(["See current loads", "Add a load", "Remove a load"])
+            loadItems = np.array(["See current loads", "Add a load", "Remove a load", "Go to main menu"])
             print("what do you wish to do ?")
             loadChoice = displayMenu(loadItems)
 
             if loadChoice == 1: # See current loads
-                if sum(df.loadPosition) or sum(df.forcePosition) == 0:
+                if sum(df.loadPosition) == 0:
                     print("There are currently no load forces on the beam")
                     pass
                 else:
@@ -53,21 +62,18 @@ while True:
             if loadChoice == 2: # Add a load
                 while True:
                     try:
-                        load_pos = inputNumber("Enter position of load in meters: ")
-                        force_val = inputNumber("Enter the force at the position: ")
-
-                        if load_pos < 0 or load_pos > df.iloc[0,0]: # must not be longer than length of beam
+                        load_pos = float(inputNumber("Enter position of load in meters (beam is {} meters): ".format(beamLength)))
+                        force_val = float(inputNumber("Enter the force at the position: "))
+                        if load_pos < 0 : # must not be longer than length of beam
                             raise
-
                         # load position and load force is appended to df
                         df = df.append({"loadPosition": load_pos, "forcePosition": force_val}, ignore_index=True)
                         break
                     except:
                         print("Your load position can not be lower than 0. ")
+
             if loadChoice == 3: # Remove a load
                 #prints dataframe and the user can select which line to remove
-
-
 
                 while True:
                     try:
@@ -80,7 +86,12 @@ while True:
                     except:
                         print("There are currently no load forces on the beam")
 
+            if loadChoice == 4: # Go to main menu
+                break
+
     if mainChoice == 3: # Save beam and loads
+
+        # ADD BEAM INFO TO ARRAY
         saving_filename = input("What do you wish to name your file ?: ")
 
         #file shall not overwrite old file
@@ -94,6 +105,10 @@ while True:
 
 
     if mainChoice == 4: # Load beam and loads
+
+        # REMEBER TO EXTRACT BEAMLENGTH AND BEAMSUPPORT AND CREATE 2xN ARRAY
+
+
         load_filename = input("Please enter the csv file you wish to load")
 
         df = pd.read_csv(load_filename)
