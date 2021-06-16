@@ -8,40 +8,41 @@ def dataLoad(filename):
 
     # initial condition is that the data is accepted
 
-    df = pd.read_csv(load_filename)
-
-    data = [0, 0, 0]
+    df = pd.read_csv(filename)
+    
+    beamLength = df.get_value(0, 'beamLength')
+    beamSupport = df.get_value(0, 'beamSupport')
+        
+    data = [0, 0]
     read = True
-    temp_file = pd.read_csv(filename, header=None, delim_whitespace=True,
+    temp_file = pd.read_csv(filename, header=None, delim_comma=True,
                             dtype=float)  # delimiter is whitespace
 
-    arr = np.array(temp_file)  # numpy array, every row is true
+    arr = np.array(temp_file[['loadPosition', 'forceVal']])  # numpy array, every row is true
 
     for i in range(len(arr[:, 1])):  # length of dataset
-        if len(np.array(arr)[i, :]) == 3:  # only use rows with 3 elements
-
+        if not(np.isnan(arr[i, :]).any == True):
             # temperature boundary in 0'th collumn
-            if 10 >= np.array(arr)[i, 0] or np.array(arr)[i, 0] >= 60:
+            if arr[i, 0] < 0 or arr[i, 0] > beamLength:
                 read = False
-                print("Error in temperature in line", i+1, ", data removed")
-
-            if np.array(arr)[i, 1] < 0:  # growth rate in 1'st collumn
+                print("Load {} out of range of beam length.".format(i + 1))
+    
+            if arr[i, 1] < 0:  # growth rate in 1'st collumn
                 read = False
-                print("Error in growth rate in line", i+1, ", data removed")
-
-            if 1 > np.array(arr)[i, 2] or np.array(arr)[i, 2] > 4:
-                read = False
-                print("Error in bacteria class in line", i+1, ", data removed")
-
+                print("Load {} has weight under 0".format(i + 1))
+    
             if read:  # we then stack i'th array on to the dataset
                 data = np.vstack((data, arr[i]))
+            else:
+                print('Load {} removed.'.format(i + 1))
+            
+        else:
+            print('Either load position or load force missing. Data removed.')
 
-            read = True  # we reset all to true when false ones arent read
+        read = True  # we reset all to true when false ones arent read
 
-        else:  # if one of the 3 parameters is missing, our error is printed form here.
-            print("Error in line", i+1, ", not enough information")
 
-    data = np.delete(data, 0, axis=0)  # removal of initial [0,0,0] array
-    org_data = data  # original data. Is never changed in script
+    data = np.delete(data, 0, axis=0)  # removal of initial [0, 0] array
+    dataF = pd.DataFrame(data, columns = ['loadPosition', 'forceVal']) # original data. Is never changed in script
 
-    return data, org_data
+    return dataF, beamLength, beamSupport
