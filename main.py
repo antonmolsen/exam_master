@@ -155,9 +155,14 @@ while True:
                 print("File already exists. Please enter another filename")
 
     if mainChoice == 4:  # Load beam and loads
-        load_filename = input("Please enter the csv file you wish to load")
+        files = np.array(os.listdir(os.getcwd()))
+        files = files[np.char.find(files, '.csv') > 0]
+        print('These files are availble in the current working directory:')
+        fileChoice = displayMenu(files) - 1
+        
+        filename = files[int(fileChoice)]
 
-        df, beamLength, beamSupport = dataLoad(load_filename)
+        df, beamLength, beamSupport = dataLoad(filename)
 
         # use dataload funktion
 
