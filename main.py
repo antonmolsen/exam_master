@@ -172,8 +172,8 @@ while True:
     if mainChoice == 4:  # Load beam and loads
         files = np.array(os.listdir(os.getcwd()))
         files = files[np.char.find(files, '.csv') > 0]
-        nExit = np.size(files) + 2
-        files = np.hstack(files, 'Exit')
+        nExit = np.size(files)
+        files = np.hstack((files, 'Exit'))
         print('These files are availble in the current working directory:')
         fileChoice = displayMenu(files) - 1
 
