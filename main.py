@@ -120,16 +120,19 @@ while True:
 
     if mainChoice == 3:  # Save beam and loads
         while True:
-            try:
+            #try:
                 saving_filename = input("What do you wish to name your file ?: ")
-
+                df_for_saving = df
                 if os.path.isfile(saving_filename + ".csv"):
                     raise
-                df_for_saving = df.insert(2, "beamLength", [beamLength], True)
-                df_for_saving = df.insert(3, "beamSupport", [beamSupport], True)
-
+                df_for_saving.insert(2, "beamLength", np.nan, False)
+                df_for_saving.insert(3, "beamSupport", '', False)
+                
+                df_for_saving.at[0, "beamLength"] = beamLength
+                df_for_saving.at[0, "beamSupport"] = beamSupport
+                
                 # file shall not overwrite old file
-                s = df.to_csv(index = False)
+                s = df_for_saving.to_csv(index = False)
                 f = open(saving_filename + ".csv", "w")  # write
                 f.write(s)
                 f.close()
@@ -137,7 +140,7 @@ while True:
                 print('File saved as "{}" in "{}"'.format(saving_filename, cwd))
 
                 break
-            except:
+            #except:
                 print("File already exists. Please enter another filename")
 
     if mainChoice == 4:  # Load beam and loads
