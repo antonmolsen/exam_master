@@ -44,7 +44,7 @@ while True:
                     ans = inputString("Your new beam is shorter than some of the current load positions. \n"
                                 "Do you wish to enter your new beam, and therefore remove the loads that are out of bounds? y/n ?", "yn")
 
-                    if ans == "y" # yes - we remove loads above new length
+                    if ans == "y"  # yes - we remove loads above new length
                         df_bool = df.loadPosition > beamLength
                         removal_indexes = df.index.values[~df_bool]
 
@@ -177,18 +177,21 @@ while True:
     if mainChoice == 4:  # Load beam and loads
         files = np.array(os.listdir(os.getcwd()))
         files = files[np.char.find(files, '.csv') > 0]
+        nExit = np.size(files) + 2
+        files = np.hstack(files, 'Exit')
         print('These files are availble in the current working directory:')
         fileChoice = displayMenu(files) - 1
         
-        filename = files[int(fileChoice)]
+        if fileChoice == nExit:
+            pass
+        
+        else:
+            filename = files[int(fileChoice)]
+    
+            df, beamLength, beamSupport = dataLoad(filename)
 
-        df, beamLength, beamSupport = dataLoad(filename)
+            print("Data loaded")
 
-        # use dataload funktion
-
-        print("Data loaded")
-
-        "cantilever"
     if mainChoice == 5:  # Generate plot
         beamPlot(beamLength, np.array(df.loadPosition), np.array(df.forceVal), beamSupport)
 
