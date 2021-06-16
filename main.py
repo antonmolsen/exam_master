@@ -48,7 +48,7 @@ while True:
     if mainChoice == 2:  # Configure loads
         while True:
             loadItems = np.array(["See current loads", "Add a load",
-                                  "Remove a load", "Go to main menu"])
+                                  "Remove a load", "Remove all loads","Go to main menu"])
             print("What do you wish to do?")
             loadChoice = displayMenu(loadItems)
 
@@ -95,7 +95,6 @@ while True:
                         weights = pd.DataFrame(data=temp)
                         lPositions = np.array(df.loadPosition)
                         fVal = np.array(df.forceVal)
-
                         for i in range(np.size(lPositions)):
                             weights = weights.append(
                                 {'': 'W{}'.format(
@@ -103,17 +102,31 @@ while True:
                                 ignore_index=True)
                         print(weights.to_string(index=False), '\n')
 
-                        removed_forces = inputString(
-                            'Please enter a comma seperated list of the forces you wish to remove, e.g. "W1,W2" ', 'wW1234, ')
-                        removed_forces.upper().replace("W", "")
+                        #removal of forces from string input
+                        removed_forces = inputString('Please enter a list of the forces you wish to remove, e.g. "W1,W2" ', 'wW1234, ')
+                        #removed_forces = removed_forces.upper().replace("W", "")
 
+                        for i in range(len(df.loadForce)):
+                            if str(i) in removed_forces:
+                                df = df.drop(i)
+                                print("force {} has been removed".format(i+1))
+
+                        df = df.reset_index(drop=True)
                         if len(df.loadPosition) == 0:
                             raise
                         break
                     except:
                         print("There are currently no load forces on the beam")
 
-            if loadChoice == 4:  # Go to main menu
+
+
+            if loadChoice == 4: #remove all loads
+                df.loadPosition = 0
+                df.forceVal = 0
+                print("All loads removed succesfully")
+
+
+            if loadChoice == 5:  # Go to main menu
                 break
 
     if mainChoice == 3:  # Save beam and loads
