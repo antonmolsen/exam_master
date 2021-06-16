@@ -10,13 +10,12 @@ def dataLoad(filename):
 
     df = pd.read_csv(filename)
     
-    beamLength = df.get_value(0, 'beamLength')
-    beamSupport = df.get_value(0, 'beamSupport')
+    beamLength = df.at[0, 'beamLength']
+    beamSupport = df.at[0, 'beamSupport']
         
     data = [0, 0]
     read = True
-    temp_file = pd.read_csv(filename, header=None, delim_comma=True,
-                            dtype=float)  # delimiter is whitespace
+    temp_file = pd.read_csv(filename)  # delimiter is whitespace
 
     arr = np.array(temp_file[['loadPosition', 'forceVal']])  # numpy array, every row is true
 
