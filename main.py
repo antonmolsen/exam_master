@@ -6,6 +6,7 @@ from functions.displayMenu import *
 from functions.beamDeflection import beamDeflection
 from functions.beamSuperposition import beamSuperposition
 from functions.beamPlot import beamPlot
+from functions.dataLoad import dataLoad
 
 # Main script
 
@@ -23,8 +24,6 @@ while True:
     try:
         if mainChoice > 1 and beamLength == 0:
             raise
-
-
 
         if mainChoice == 1: # Configure beam
             while True:
@@ -69,20 +68,19 @@ while True:
                         
                         print(weights.to_string(index = False),'\n')
 
-                        # PRINT DATFRAME HERE
-
                 if loadChoice == 2: # Add a load
                     while True:
                         try:
                             load_pos = float(inputNumber("Enter position of load in meters (beam is {} meters): ".format(beamLength)))
-                            force_val = float(inputNumber("Enter the force at the position: "))
-                            if load_pos < 0 : # must not be longer than length of beam
+
+                            if load_pos < 0 or load_pos > beamLength : # must not be longer than length of beam
                                 raise
                             # load position and load force is appended to df
+                            force_val = float(inputNumber("Enter the force at the position: "))
                             df = df.append({"loadPosition": load_pos, "forceVal": force_val}, ignore_index=True)
                             break
                         except:
-                            print("Your load position can not be lower than 0. ")
+                            print("Your load position can not be out of range of the beam")
 
                 if loadChoice == 3: # Remove a load
                     #prints dataframe and the user can select which line to remove
@@ -102,28 +100,31 @@ while True:
                     break
 
         if mainChoice == 3: # Save beam and loads
+            while True:
+                try:
+                    saving_filename = input("What do you wish to name your file ?: ")
 
-            # ADD BEAM INFO TO ARRAY
-            saving_filename = input("What do you wish to name your file ?: ")
+                    if os.path.isfile(saving_filename + ".csv"):
+                        raise
+                    df_for_saving = df.insert(2, "beamLength", [beamLength], True)
+                    df_for_saving = df.insert(3, "beamSupport", [beamSupport], True)
 
-            #file shall not overwrite old file
+                    # file shall not overwrite old file
+                    s = df.to_csv(index=False)
+                    f = open(saving_filename + ".csv", "w")  # write
+                    f.write(s)
+                    f.close()
+                    cwd = os.getcwd()
+                    print('file saved as "{}" in "{}"'.format(saving_filename, cwd))
 
-            s = df.to_csv(index=False)
-            f = open("beam_and_support_data.csv", "w") #write
-            f.write(s)
-            f.close()
-            #print("file saved as {} in {}".format(saving_filename, cd))
-
-
+                    break
+                except:
+                    print("File already exists. Please enter another filename")
 
         if mainChoice == 4: # Load beam and loads
-
-            # REMEBER TO EXTRACT BEAMLENGTH AND BEAMSUPPORT AND CREATE 2xN ARRAY
-
-
             load_filename = input("Please enter the csv file you wish to load")
 
-            df = pd.read_csv(load_filename)
+            dataLoad(load_filenamefilename)
 
             #use dataload funktion
 
