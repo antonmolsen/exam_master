@@ -144,7 +144,7 @@ while True:
     if mainChoice == 4:  # Load beam and loads
         load_filename = input("Please enter the csv file you wish to load")
 
-        dataLoad(load_filenamefilename)
+        df, beamLength, beamSupport = dataLoad(load_filenamefilename)
 
         # use dataload funktion
 
