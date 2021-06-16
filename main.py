@@ -33,6 +33,7 @@ while True:
 
                 if beamLength <= 0:
                     raise
+
                 supportItems = np.array(["both", "cantilever"])
                 supportChoice = displayMenu(supportItems)
                 if supportChoice == 1:
@@ -40,17 +41,16 @@ while True:
                 elif supportChoice == 2:
                     beamSupport = "cantilever"
 
-                if beamLength > df.loadPosition:
-                    ans = inputString("Your new beam is shorter than some of the current load positions. \n"
-                                "Do you wish to enter your new beam, and therefore remove the loads that are out of bounds? y/n ?", "yn")
-
-                    if ans == "y"  # yes - we remove loads above new length
+                if np.array(beamLength > df.loadPosition).any() == True:
+                    ans = inputString(
+                        "Your new beam is shorter than some of the current load positions. \n Do you wish to enter your new beam, and therefore remove the loads that are out of bounds? y/n ?", "yn")
+                    if ans == "y":  # yes - we remove loads above new length
                         df_bool = df.loadPosition > beamLength
                         removal_indexes = df.index.values[~df_bool]
 
                         df = dataRemove(df, removal_indexes)
 
-                    elif ans == "n" # no - go back to main menu
+                    elif ans == "n":  # no - go back to main menu
                         print("Going back to main menu")
                         break
 
@@ -64,7 +64,7 @@ while True:
     if mainChoice == 2:  # Configure loads
         while True:
             loadItems = np.array(["See current loads", "Add a load",
-                                  "Remove a load", "Remove all loads","Go to main menu"])
+                                  "Remove a load", "Remove all loads", "Go to main menu"])
             print("What do you wish to do?")
             loadChoice = displayMenu(loadItems)
 
@@ -121,16 +121,13 @@ while True:
                                 ignore_index=True)
                         print(weights.to_string(index=False), '\n')
 
-                        #removal of forces from string input
-                        removed_forces = inputString('Please enter a list of the forces you wish to remove, e.g. "W1,W2" ', 'wW1234, ')
-                        removed_forces = np.fromstring(removed_forces.upper().replace("W",""), dtype=int, sep=',')
-
-
-
-
+                        # removal of forces from string input
+                        removed_forces = inputString(
+                            'Please enter a list of the forces you wish to remove, e.g. "W1,W2" ', 'wW1234, ')
+                        removed_forces = np.fromstring(
+                            removed_forces.upper().replace("W", ""), dtype=int, sep=',')
 
                         df = dataRemove(df, removed_forces)
-
 
                         if len(df.loadPosition) == 0:
                             raise
@@ -138,13 +135,10 @@ while True:
                     except:
                         print("There are currently no load forces on the beam")
 
-
-
-            if loadChoice == 4: #remove all loads
+            if loadChoice == 4:  # remove all loads
                 df.loadPosition = 0
                 df.forceVal = 0
                 print("All loads removed succesfully")
-
 
             if loadChoice == 5:  # Go to main menu
                 break
@@ -154,14 +148,15 @@ while True:
             try:
                 saving_filename = input("What do you wish to name your file ?: ")
                 df_for_saving = df
-                if os.path.isfile(saving_filename + ".csv"): # if file exists the user should rename the file
+                # if file exists the user should rename the file
+                if os.path.isfile(saving_filename + ".csv"):
                     raise
                 df_for_saving.insert(2, "beamLength", np.nan, False)
                 df_for_saving.insert(3, "beamSupport", '', False)
-    
+
                 df_for_saving.at[0, "beamLength"] = beamLength
                 df_for_saving.at[0, "beamSupport"] = beamSupport
-    
+
                 # file shall not overwrite old file
                 s = df_for_saving.to_csv(index=False)
                 f = open(saving_filename + ".csv", "w")  # write
@@ -169,7 +164,7 @@ while True:
                 f.close()
                 cwd = os.getcwd()
                 print('File saved as "{}" in "{}"'.format(saving_filename, cwd))
-    
+
                 break
             except:
                 print("File already exists. Please enter another filename")
@@ -181,13 +176,13 @@ while True:
         files = np.hstack(files, 'Exit')
         print('These files are availble in the current working directory:')
         fileChoice = displayMenu(files) - 1
-        
+
         if fileChoice == nExit:
             pass
-        
+
         else:
             filename = files[int(fileChoice)]
-    
+
             df, beamLength, beamSupport = dataLoad(filename)
 
             print("Data loaded")
