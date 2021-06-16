@@ -102,13 +102,11 @@ while True:
                                 {'': 'W{}'.format(
                                     i + 1), 'Forces [N]': fVal[i], 'Positions [m]': lPositions[i]},
                                 ignore_index=True)
-
                         print(weights.to_string(index=False), '\n')
 
                         removed_forces = inputString(
                             'Please enter a comma seperated list of the forces you wish to remove, e.g. "W1,W2" ', 'wW1234, ')
-
-                        removed_forces
+                        removed_forces.upper().replace("W","")
 
                         if len(df.loadPosition) == 0:
                             raise
@@ -123,9 +121,9 @@ while True:
         while True:
             try:
                 saving_filename = input("What do you wish to name your file ?: ")
-
                 if os.path.isfile(saving_filename + ".csv"):
                     raise
+
                 df_for_saving = df.insert(2, "beamLength", [beamLength], True)
                 df_for_saving = df.insert(3, "beamSupport", [beamSupport], True)
 
