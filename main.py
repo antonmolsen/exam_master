@@ -15,7 +15,6 @@ from functions.dataLoad import dataLoad
 # Initial conditions
 df = pd.DataFrame({"loadPosition": [],
                    "forceVal": []})
-beamLength = 0
 beamLength = 10
 beamSupport = "both"
 
@@ -130,12 +129,12 @@ while True:
                 df_for_saving = df.insert(3, "beamSupport", [beamSupport], True)
 
                 # file shall not overwrite old file
-                s = df.to_csv(index=False)
+                s = df.to_csv(index = False)
                 f = open(saving_filename + ".csv", "w")  # write
                 f.write(s)
                 f.close()
                 cwd = os.getcwd()
-                print('file saved as "{}" in "{}"'.format(saving_filename, cwd))
+                print('File saved as "{}" in "{}"'.format(saving_filename, cwd))
 
                 break
             except:
@@ -144,7 +143,7 @@ while True:
     if mainChoice == 4:  # Load beam and loads
         load_filename = input("Please enter the csv file you wish to load")
 
-        df, beamLength, beamSupport = dataLoad(load_filenamefilename)
+        df, beamLength, beamSupport = dataLoad(load_filename)
 
         # use dataload funktion
 
