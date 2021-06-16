@@ -101,13 +101,11 @@ while True:
                                 {'': 'W{}'.format(
                                     i + 1), 'Forces [N]': fVal[i], 'Positions [m]': lPositions[i]},
                                 ignore_index=True)
-
                         print(weights.to_string(index=False), '\n')
 
                         removed_forces = inputString(
                             'Please enter a comma seperated list of the forces you wish to remove, e.g. "W1,W2" ', 'wW1234, ')
-
-                        removed_forces
+                        removed_forces.upper().replace("W", "")
 
                         if len(df.loadPosition) == 0:
                             raise
@@ -120,28 +118,28 @@ while True:
 
     if mainChoice == 3:  # Save beam and loads
         while True:
-            #try:
-                saving_filename = input("What do you wish to name your file ?: ")
-                df_for_saving = df
-                if os.path.isfile(saving_filename + ".csv"):
-                    raise
-                df_for_saving.insert(2, "beamLength", np.nan, False)
-                df_for_saving.insert(3, "beamSupport", '', False)
-                
-                df_for_saving.at[0, "beamLength"] = beamLength
-                df_for_saving.at[0, "beamSupport"] = beamSupport
-                
-                # file shall not overwrite old file
-                s = df_for_saving.to_csv(index = False)
-                f = open(saving_filename + ".csv", "w")  # write
-                f.write(s)
-                f.close()
-                cwd = os.getcwd()
-                print('File saved as "{}" in "{}"'.format(saving_filename, cwd))
+            # try:
+            saving_filename = input("What do you wish to name your file ?: ")
+            df_for_saving = df
+            if os.path.isfile(saving_filename + ".csv"):
+                raise
+            df_for_saving.insert(2, "beamLength", np.nan, False)
+            df_for_saving.insert(3, "beamSupport", '', False)
 
-                break
-            #except:
-                print("File already exists. Please enter another filename")
+            df_for_saving.at[0, "beamLength"] = beamLength
+            df_for_saving.at[0, "beamSupport"] = beamSupport
+
+            # file shall not overwrite old file
+            s = df_for_saving.to_csv(index=False)
+            f = open(saving_filename + ".csv", "w")  # write
+            f.write(s)
+            f.close()
+            cwd = os.getcwd()
+            print('File saved as "{}" in "{}"'.format(saving_filename, cwd))
+
+            break
+            # except:
+            print("File already exists. Please enter another filename")
 
     if mainChoice == 4:  # Load beam and loads
         load_filename = input("Please enter the csv file you wish to load")
