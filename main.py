@@ -33,6 +33,7 @@ while True:
 
                 if beamLength <= 0:
                     raise
+
                 supportItems = np.array(["both", "cantilever"])
                 supportChoice = displayMenu(supportItems)
                 if supportChoice == 1:
@@ -40,17 +41,16 @@ while True:
                 elif supportChoice == 2:
                     beamSupport = "cantilever"
 
-                if beamLength > df.loadPosition:
-                    ans = inputString("Your new beam is shorter than some of the current load positions. \n"
-                                "Do you wish to enter your new beam, and therefore remove the loads that are out of bounds? y/n ?", "yn")
 
-                    if ans == "y" # yes - we remove loads above new length
+                if np.array(beamLength > df.loadPosition).any() == True:
+                    ans = inputString("Your new beam is shorter than some of the current load positions. \n Do you wish to enter your new beam, and therefore remove the loads that are out of bounds? y/n ?", "yn")
+                    if ans == "y": # yes - we remove loads above new length
                         df_bool = df.loadPosition > beamLength
                         removal_indexes = df.index.values[~df_bool]
 
                         df = dataRemove(df, removal_indexes)
 
-                    elif ans == "n" # no - go back to main menu
+                    elif ans == "n": # no - go back to main menu
                         print("Going back to main menu")
                         break
 
