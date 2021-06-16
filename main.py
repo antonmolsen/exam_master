@@ -7,6 +7,7 @@ from functions.beamDeflection import beamDeflection
 from functions.beamSuperposition import beamSuperposition
 from functions.beamPlot import beamPlot
 from functions.dataLoad import dataLoad
+from functions.dataRemove import dataRemove
 
 # Main script
 
@@ -38,6 +39,21 @@ while True:
                     beamSupport = "both"
                 elif supportChoice == 2:
                     beamSupport = "cantilever"
+
+                if beamLength > df.loadPosition:
+                    ans = inputString("Your new beam is shorter than some of the current load positions. \n"
+                                "Do you wish to enter your new beam, and therefore remove the loads that are out of bounds? y/n ?", "yn")
+
+                    if ans == "y" # yes - we remove loads above new length
+                        df_bool = df.loadPosition > beamLength
+                        removal_indexes = df.index.values[~df_bool]
+
+                        df = dataRemove(df, removal_indexes)
+
+                    elif ans == "n" # no - go back to main menu
+                        print("Going back to main menu")
+                        break
+
                 break
             except:
                 print("Beam must be a positive value. Please try again")
@@ -90,6 +106,9 @@ while True:
                 # prints dataframe and the user can select which line to remove
                 while True:
                     try:
+                        if len(df.loadPosition) == 0:
+                            raise
+
                         print("The forces are: \n")
                         temp = {'': [], 'Forces [N]': [], 'Positions [m]': []}
                         weights = pd.DataFrame(data=temp)
@@ -104,14 +123,15 @@ while True:
 
                         #removal of forces from string input
                         removed_forces = inputString('Please enter a list of the forces you wish to remove, e.g. "W1,W2" ', 'wW1234, ')
-                        #removed_forces = removed_forces.upper().replace("W", "")
+                        removed_forces = np.fromstring(removed_forces.upper().replace("W",""), dtype=int, sep=',')
 
-                        for i in range(len(df.loadForce)):
-                            if str(i) in removed_forces:
-                                df = df.drop(i)
-                                print("force {} has been removed".format(i+1))
 
-                        df = df.reset_index(drop=True)
+
+
+
+                        df = dataRemove(df, removed_forces)
+
+
                         if len(df.loadPosition) == 0:
                             raise
                         break
@@ -134,7 +154,7 @@ while True:
             try:
                 saving_filename = input("What do you wish to name your file ?: ")
                 df_for_saving = df
-                if os.path.isfile(saving_filename + ".csv"):
+                if os.path.isfile(saving_filename + ".csv"): # if file exists the user should rename the file
                     raise
                 df_for_saving.insert(2, "beamLength", np.nan, False)
                 df_for_saving.insert(3, "beamSupport", '', False)
