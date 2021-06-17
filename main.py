@@ -160,7 +160,6 @@ while True:
 
                         removed_forces = np.fromstring(
                             removed_forces.upper().replace("W", ""), dtype=int, sep=',')
-                        removed_forces = np.fromstring(removed_forces.upper().replace("W", ""), dtype=int, sep=',')
 
                         if np.any(removed_forces < 1) or np.any(removed_forces > np.size(lPositions)):
                             raise ValueOutOfBound('Please only choose loads from the list.')
