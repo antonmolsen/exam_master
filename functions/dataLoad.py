@@ -4,17 +4,15 @@ import pandas as pd
 
 def dataLoad(filename):
     # The function loads in the data as a numpy array. The data is then
-    # filtered so known bad data is removed.
-
-    # initial condition is that the data is accepted
+    # filtered so erroneous data is removed. funciton returns the dataframe that the program
+    # usually operates with, along with the beamLength and beamSupport, loaded from file.
 
     df = pd.read_csv(filename)
-    
     beamLength = df.at[0, 'beamLength']
     beamSupport = df.at[0, 'beamSupport']
         
     data = [0, 0]
-    read = True
+    read = True # Inital condition is that all data is read.
     temp_file = pd.read_csv(filename)  # delimiter is whitespace
 
     arr = np.array(temp_file[['loadPosition', 'forceVal']])  # numpy array, every row is true
@@ -39,9 +37,7 @@ def dataLoad(filename):
             print('Either load position or load force missing. Data removed.')
 
         read = True  # we reset all to true when false ones arent read
-
-
     data = np.delete(data, 0, axis=0)  # removal of initial [0, 0] array
-    dataF = pd.DataFrame(data, columns = ['loadPosition', 'forceVal']) # original data. Is never changed in script
+    dataF = pd.DataFrame(data, columns = ['loadPosition', 'forceVal'])
 
     return dataF, beamLength, beamSupport

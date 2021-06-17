@@ -4,6 +4,9 @@ from functions.beamDeflection import beamDeflection
 
 def beamSuperposition(positions, beamLength, loadPositions, loadForces, beamSupport):
     deflection = np.zeros(np.size(positions))
+    # Function to calculate deflection at given positions, with multiple
+    # load positions (and corresponding load forces). As in "beamDeflection",
+    # "beamSupport" is also needed as input
 
 
 

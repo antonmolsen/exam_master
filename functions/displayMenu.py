@@ -1,8 +1,10 @@
 import numpy as np
 
+# Input and menu functions
+
 
 def inputNumber(prompt):
-    # The function takes a promt and forces the user to write a number.
+    # The function takes a prompt and forces the user to write a number.
 
     while True:
         try:
@@ -37,13 +39,13 @@ def displayMenu(options):
     return choice
 
 
-def inputString(promt, acceptable):
-    # The function takes a promt and a string of acceptable characters and
+def inputString(prompt, acceptable):
+    # The function takes a prompt and a string of acceptable characters and
     # checks if the user input is acceptable.
 
     while True:
         try:
-            choice = input(promt)
+            choice = input(prompt)
             for i in choice:
                 if not(i in acceptable):
                     raise
