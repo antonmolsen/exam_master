@@ -1,6 +1,11 @@
 import numpy as np
 
 def beamDeflection(positions, beamLength, loadPosition, loadForce, beamSupport):
+    # Function to calculate beam deflection at "positions", with given beam length,
+    # load position (and corresponding load force), and at last the support-type of
+    # the beam. Returns a vector with deflections at the given positions.
+
+
     # initial constants
     E = 200*10**9 # Newton per meters squared
     I = 1*10**(-3) # Meters to the fourth power

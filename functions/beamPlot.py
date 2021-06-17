@@ -5,6 +5,11 @@ from functions.beamSuperposition import *
 
 
 def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
+    # function to create plot of current beam with current loads.
+    # To prevent the plot from being too filled with loaddata, if the
+    # number of loads is big, information about each load are displayed
+    # as "w1", "w2", etc. in the Python Console.
+
     positions = np.arange(0, beamLength, beamLength/2000)
     height = beamSuperposition(positions, beamLength, loadPositions, loadForces, beamSupport)
     minHeight = min(height)
