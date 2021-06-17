@@ -16,6 +16,24 @@ from functions.dataRemove import dataRemove
 # the program will read the correct data, and remove the erroneous parts. The program can only
 # run one beam at a time, and will tell the user if she has loads out of bounds of the new beam.
 
+# Custom errors
+class Error(Exception):
+    # Base for other custom errors
+    pass
+
+class ValueOutOfBound(Error):
+    # Error for when a value is out of bounds
+    pass
+
+class EmptyDF(Error):
+    # Error when the user tries to work with / display a empty DataFrame
+    pass
+
+class FileOverwriteError(Error):
+    # Error when the user tries to overwrite a already existing file
+    pass
+
+
 # Initial conditions
 df = pd.DataFrame({"loadPosition": [],"forceVal": []})
 beamLength = 10
@@ -35,7 +53,8 @@ while True:
                 init_beam_len = beamLength
                 beamLength = float(input("Please enter the length of beam in meters: "))
                 if beamLength <= 0:
-                    raise
+                    raise ValueOutOfBound("Beam must be a positive value")
+
                 supportItems = np.array(["both", "cantilever"])
                 supportChoice = displayMenu(supportItems)
                 if supportChoice == 1:
@@ -59,8 +78,11 @@ while True:
                         break
 
                 break
-            except:
-                print("Beam must be a positive value. Please try again: ")
+            except ValueOutOfBound as error:
+                print(error)
+
+            except ValueError:
+                print('Please enter a valid number')
 
         print("Beam loaded")
         # first row of dataframe is reserved for beam information
@@ -100,17 +122,17 @@ while True:
                             "Enter position of load in meters (beam is {} meters): ".format(beamLength)))
 
                         if load_pos < 0 or load_pos > beamLength:  # must not be longer than length of beam
-                            raise Exception('Your load position can not be out of range of the beam.')
+                            raise ValueOutOfBound('Your load position can not be out of range of the beam.')
 
                         force_val = float(inputNumber("Enter the force at the position: "))
                         if force_val < 0:  # force must not be negative, since we do
                             # not know if the given formulas are valid in that case.
-                            raise Exception('Your force must be positive.')
+                            raise ValueOutOfBound('Your force must be positive.')
 
                         df = df.append({"loadPosition": load_pos,
                                         "forceVal": force_val}, ignore_index=True)
                         break
-                    except Exception as error:
+                    except ValueOutOfBound as error:
                         print(error)
 
             if loadChoice == 3:  # Remove a load
@@ -118,8 +140,8 @@ while True:
                 while True:
                     try:
                         if len(df.loadPosition) == 0:
-                            raise Exception("There are currently no load forces on the beam.")
-
+                            raise EmptyDF("There are currently no load forces on the beam.")
+                            
                         print("The forces are: \n")
                         temp = {'': [], 'Forces [N]': [], 'Positions [m]': []}
                         weights = pd.DataFrame(data=temp)
@@ -138,20 +160,21 @@ while True:
 
                         removed_forces = np.fromstring(
                             removed_forces.upper().replace("W", ""), dtype=int, sep=',')
-                        removed_forces = np.fromstring(removed_forces.upper().replace("W", ""), dtype=int, sep=',')
 
                         if np.any(removed_forces < 1) or np.any(removed_forces > np.size(lPositions)):
-                            raise IndexError('Please only choose loads from the list.')
-
+                            raise ValueOutOfBound('Please only choose loads from the list.')
+                        
                         df = dataRemove(df, removed_forces)
 
                         break
-                    except IndexError as error:
+                    except ValueOutOfBound as error:
                         print(error)
-
-                    except Exception as error:
+                    
+                    except EmptyDF as error:
                         print(error)
                         break
+
+                    
 
             if loadChoice == 4:  # remove all loads
                 df = df.iloc[0:0]    
@@ -169,7 +192,7 @@ while True:
                 df_for_saving = df
                 # if file exists the user should rename the file
                 if os.path.isfile(saving_filename + ".csv"):
-                    raise
+                    raise FileOverwriteError('File already exists. Please enter another filename')
                 df_for_saving.insert(2, "beamLength", np.nan, False)
                 df_for_saving.insert(3, "beamSupport", '', False)
 
@@ -185,8 +208,8 @@ while True:
                 print('Beam and load data saved as "{}" in "{}"'.format(saving_filename + ".csv", cwd))
 
                 break
-            except:
-                print("File already exists. Please enter another filename")
+            except FileOverwriteError as error:
+                print(error)
 
     if mainChoice == 4:  # Load beam and loads
         files = np.array(os.listdir(os.getcwd()))
