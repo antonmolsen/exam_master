@@ -24,7 +24,7 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
     temp = {'':[],'Forces [N]':[], 'Positions [m]':[]} # Makes a dataframe to display loads.
     weights = pd.DataFrame(data = temp)
     
-    plt.plot(positions, height, 'r-', label = "{:.1f} m beam".format(beamLength))
+    plt.plot(positions, height, 'r-', label = "{:.2E} m beam".format(beamLength))
     
     for i in range(np.size(loadPositions)):
         # Plots text and arrows to show the load position. They all scale with the size of the plot.
