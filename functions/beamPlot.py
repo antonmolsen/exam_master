@@ -15,23 +15,35 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
     maxHeight = max(height)
     dHeigth = maxHeight - minHeight
     
-    if dHeigth == 0:
+    if dHeigth == 0: # Is nessesary to be able to plot without loads
         minHeight = -1
         maxHeight = 1
     
-    temp = {'':[],'Forces [N]':[], 'Positions [m]':[]}
+    temp = {'':[],'Forces [N]':[], 'Positions [m]':[]} # Makes a dataframe to display loads.
     weights = pd.DataFrame(data = temp)
     
-    plt.plot(positions, height, 'r-', label = "Beam")
+    plt.plot(positions, height, 'r-', label = "{:.1f} m beam".format(beamLength))
+    
     for i in range(np.size(loadPositions)):
+        # Plots text and arrows to show the load position. They all scale with the size of the plot.
+        
         loadHeight = beamSuperposition(
             np.array([loadPositions[i]]), beamLength, loadPositions, loadForces, beamSupport)
+        
         plt.arrow(loadPositions[i], loadHeight[0] - minHeight*0.1, 0, minHeight*0.05, head_width=beamLength*0.02, head_length=abs(minHeight*0.03))
         plt.text(loadPositions[i] - beamLength*(0.02), loadHeight[0] - minHeight*0.15, r'$W_{{{}}}$'.format(i + 1))
         
         weights = weights.append({'':'W{}'.format(i + 1),'Forces [N]':loadForces[i], 'Positions [m]':loadPositions[i]}, ignore_index=True)
 
     
+    if beamSupport == 'both':
+        plt.plot([positions[0], positions[-1]],[height[0], height[-1]], 'ok', label = 'Anchorpoints')
+        
+    elif beamSupport == 'cantilever':
+        plt.plot(positions[0],height[0], 'ok', label = 'Anchorpoint')
+        
+
+
     plt.title('Beam deflection with support type: {:s}'.format(beamSupport))
     plt.xlim([-beamLength*(1/10), beamLength*(11/10)])
     plt.ylim([minHeight - dHeigth*0.25, maxHeight + dHeigth*0.25])
@@ -39,6 +51,6 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
     plt.ylabel('Deflection [m]')
     plt.legend()
     plt.show()
-    print(weights.to_string(index = False))
+    print(weights.to_string(index = False)) # Shows the details of the current loads.
     
     

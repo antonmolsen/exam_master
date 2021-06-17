@@ -22,7 +22,7 @@ beamLength = 10
 beamSupport = "both"
 
 while True:
-    print('\nCurrent beam is {} meters of supporttype "{}"'.format(beamLength,beamSupport))
+    print('\nCurrent beam is {} meters of support type "{}"'.format(beamLength,beamSupport))
 
     menuItems = np.array(["Configure beam", "Configure loads",
                           "Save beam and loads", "Load beam and loads", "Generate plot", "Quit"])
