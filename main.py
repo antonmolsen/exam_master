@@ -47,7 +47,7 @@ while True:
 
                 if np.array(beamLength < df.loadPosition).any() == True:
                     ans = inputString(
-                        "Your new beam is shorter than some of the current load positions. \nDo you wish to enter your new beam, and therefore remove the loads that are out of bounds? y/n ?", "yn")
+                        "Your new beam is shorter than some of the current load positions. \nDo you wish to enter your new beam, and therefore remove the loads that are out of bounds? y/n?: ", "yn")
                     if ans == "y":  # yes - we remove loads above new length
                         df_bool = df.loadPosition > beamLength
                         removal_indexes = df.index.values[df_bool]
