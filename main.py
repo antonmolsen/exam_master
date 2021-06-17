@@ -27,7 +27,7 @@ while True:
     menuItems = np.array(["Configure beam", "Configure loads",
                           "Save beam and loads", "Load beam and loads", "Generate plot", "Quit"])
     mainChoice = displayMenu(menuItems)
-
+    
     if mainChoice == 1:  # Configure beam
         while True:
             try:
