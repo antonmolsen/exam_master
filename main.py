@@ -54,7 +54,7 @@ while True:
                 beamLength = float(input("Please enter the length of beam in meters: "))
                 if beamLength <= 0:
                     raise ValueOutOfBound("Beam must be a positive value")
-                
+
                 supportItems = np.array(["both", "cantilever"])
                 supportChoice = displayMenu(supportItems)
                 if supportChoice == 1:
@@ -62,8 +62,7 @@ while True:
                 elif supportChoice == 2:
                     beamSupport = "cantilever"
 
-
-                if np.array(beamLength < df.loadPosition).any() == True:
+                if np.array(beamLength < df.loadPosition).any():
                     ans = inputString(
                         "Your new beam is shorter than some of the current load positions. \nDo you wish to enter your new beam, and therefore remove the loads that are out of bounds? y/n?: ", "yn")
                     if ans == "y":  # yes - we remove loads above new length
@@ -81,7 +80,7 @@ while True:
                 break
             except ValueOutOfBound as error:
                 print(error)
-            
+
             except ValueError:
                 print('Please enter a valid number')
 
@@ -91,7 +90,7 @@ while True:
     if mainChoice == 2:  # Configure loads
         while True:
 
-            print('\nCurrent beam is {} meters of supporttype "{}"'.format(beamLength, beamSupport))
+            print('\nCurrent beam is {} meters of support type "{}"'.format(beamLength, beamSupport))
 
             loadItems = np.array(["See current loads", "Add a load",
                                   "Choose loads to remove", "Remove all loads", "Go to main menu"])
@@ -142,7 +141,7 @@ while True:
                     try:
                         if len(df.loadPosition) == 0:
                             raise EmptyDF("There are currently no load forces on the beam.")
-                            
+
                         print("The forces are: \n")
                         temp = {'': [], 'Forces [N]': [], 'Positions [m]': []}
                         weights = pd.DataFrame(data=temp)
@@ -158,30 +157,31 @@ while True:
                         # removal of forces from string input
                         removed_forces = inputString(
                             'Please enter a list of the forces you wish to remove, e.g. "W1,W2" (enter nothing to go back): ', 'wW1234567890, ')
-                        
+
                         removed_forces = np.fromstring(
                             removed_forces.upper().replace("W", ""), dtype=int, sep=',')
+                        removed_forces = np.fromstring(removed_forces.upper().replace("W", ""), dtype=int, sep=',')
 
                         if np.any(removed_forces < 1) or np.any(removed_forces > np.size(lPositions)):
                             raise ValueOutOfBound('Please only choose loads from the list.')
-                        
+
                         df = dataRemove(df, removed_forces)
 
                         break
                     except ValueOutOfBound as error:
                         print(error)
-                    
+
                     except EmptyDF as error:
                         print(error)
                         break
 
-                    
+
 
             if loadChoice == 4:  # remove all loads
                 df = df.iloc[0:0]    
                 # df.loadPosition = 0
                 # df.forceVal = 0
-                print("All loads removed succesfully")
+                print("All loads removed successfully")
 
             if loadChoice == 5:  # Go to main menu
                 break
@@ -216,8 +216,8 @@ while True:
         files = np.array(os.listdir(os.getcwd()))
         files = files[np.char.find(files, '.csv') > 0]
         nExit = np.size(files)
-        files = np.hstack((files, 'Exit'))
-        print('These files are available in the current working directory:')
+        files = np.hstack((files, 'Go back to main menu'))
+        print('These files are available in the current working directory \n({}): '.format(os.getcwd()))
         fileChoice = displayMenu(files) - 1
 
         if fileChoice == nExit:
@@ -233,11 +233,7 @@ while True:
     if mainChoice == 5:  # Generate plot
         beamPlot(beamLength, np.array(df.loadPosition), np.array(df.forceVal), beamSupport)
 
-        # beamPlot(beamLength, ) runs here
-        # ekstra plot function ?
-        # print list of current forces in console
-
-        print("Beam plot created succesfully")
+        print("Beam plot created successfully")
 
     if mainChoice == 6:  # exits program
         print("Program closed")

@@ -51,9 +51,15 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
     plt.ylim([minHeight - dHeigth*0.25, maxHeight + dHeigth*0.5])
     plt.xlabel('Length [m]')
     plt.ylabel('Deflection [m]')
-    plt.plot([], [], ' ', label="Maximum deflection is {:.2E}".format(dHeigth))
+    plt.plot([], [], ' ', label = "Maximum deflection is {:.2E}".format(dHeigth))
     plt.legend()
+    plt.tight_layout()
     plt.show()
-    print(weights.to_string(index = False)) # Shows the details of the current loads.
+
+    if len(loadPositions) == 0:
+        print("\nThere are currently no load forces on the beam.")
+
+    else:
+        print(weights.to_string(index = False)) # Shows the details of the current loads.
     
     
