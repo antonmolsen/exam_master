@@ -101,18 +101,18 @@ while True:
                             "Enter position of load in meters (beam is {} meters): ".format(beamLength)))
 
                         if load_pos < 0 or load_pos > beamLength:  # must not be longer than length of beam
-                            raise
+                            raise Exception('Your load position can not be out of range of the beam.')
 
                         force_val = float(inputNumber("Enter the force at the position: "))
                         if force_val < 0:  # force must not be negative, since we do
                             # not know if the given formulas are valid in that case.
-                            raise
+                            raise Exception('Your force must be positive.')
 
                         df = df.append({"loadPosition": load_pos,
                                         "forceVal": force_val}, ignore_index=True)
                         break
-                    except:
-                        print("Your load position can not be out of range of the beam")
+                    except Exception as error:
+                        print(error)
 
             if loadChoice == 3:  # Remove a load
                 # prints dataframe and the user can select which line to remove
