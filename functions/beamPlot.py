@@ -32,7 +32,7 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
         loadHeight = beamSuperposition(
             np.array([loadPositions[i]]), beamLength, loadPositions, loadForces, beamSupport)
         
-        plt.arrow(loadPositions[i], loadHeight[0] - minHeight*0.1, 0, minHeight*0.05, head_width=beamLength*0.02, head_length=abs(minHeight*0.03))
+        plt.arrow(loadPositions[i], loadHeight[0] - minHeight*0.1, 0, minHeight*0.05, width = beamLength*0.005, head_width=beamLength*0.02, head_length=abs(minHeight*0.03))
         plt.text(loadPositions[i] - beamLength*(0.02), loadHeight[0] - minHeight*0.15, r'$W_{{{}}}$'.format(i + 1))
         
         weights = weights.append({'':'W{}'.format(i + 1),'Forces [N]':loadForces[i], 'Positions [m]':loadPositions[i]}, ignore_index=True)
