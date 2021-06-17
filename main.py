@@ -127,21 +127,21 @@ while True:
 
                         # removal of forces from string input
                         removed_forces = inputString(
-                            'Please enter a list of the forces you wish to remove, e.g. "W1,W2" ', 'wW1234567890, ')
+                            'Please enter a list of the forces you wish to remove, e.g. "W1,W2" (enter nothing to go back): ', 'wW1234567890, ')
                         removed_forces = np.fromstring(
                             removed_forces.upper().replace("W", ""), dtype=int, sep=',')
 
                         df = dataRemove(df, removed_forces)
 
-                        if len(df.loadPosition) == 0:
-                            raise
                         break
                     except:
-                        print("There are currently no load forces on the beam")
+                        print("There are currently no load forces on the beam.")
+                        break
 
             if loadChoice == 4:  # remove all loads
-                df.loadPosition = 0
-                df.forceVal = 0
+                df = df.iloc[0:0]    
+                # df.loadPosition = 0
+                # df.forceVal = 0
                 print("All loads removed succesfully")
 
             if loadChoice == 5:  # Go to main menu
