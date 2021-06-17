@@ -29,7 +29,7 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
         weights = weights.append({'':'W{}'.format(i + 1),'Forces [N]':loadForces[i], 'Positions [m]':loadPositions[i]}, ignore_index=True)
 
     
-    plt.title('Beam under load with support type: {:s}'.format(beamSupport))
+    plt.title('Beam deflection with support type: {:s}'.format(beamSupport))
     plt.xlim([-beamLength*(1/10), beamLength*(11/10)])
     plt.ylim([minHeight - dHeigth*0.25, maxHeight + dHeigth*0.25])
     plt.xlabel('Length [m]')
