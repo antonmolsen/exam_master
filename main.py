@@ -56,20 +56,23 @@ while True:
                     elif ans == "n":  # no - go back to main menu
                         beamLength = init_beam_len
                         beamSupport = init_beam_sup
-                        print("Going back to main menu")
+                        print("Going back to main menu.")
                         break
 
                 break
             except:
-                print("Beam must be a positive value. Please try again")
+                print("Beam must be a positive value. Please try again: ")
 
         print("Beam loaded")
         # first row of dataframe is reserved for beam information
 
     if mainChoice == 2:  # Configure loads
         while True:
+
+            print('\nCurrent beam is {} meters of supporttype "{}"'.format(beamLength, beamSupport))
+
             loadItems = np.array(["See current loads", "Add a load",
-                                  "Remove a load", "Remove all loads", "Go to main menu"])
+                                  "Choose loads to remove", "Remove all loads", "Go to main menu"])
             print("What do you wish to do?")
             loadChoice = displayMenu(loadItems)
 
@@ -168,7 +171,7 @@ while True:
                 f.write(s)
                 f.close()
                 cwd = os.getcwd()
-                print('File saved as "{}" in "{}"'.format(saving_filename + ".csv", cwd))
+                print('Beam and load data saved as "{}" in "{}"'.format(saving_filename + ".csv", cwd))
 
                 break
             except:
@@ -179,7 +182,7 @@ while True:
         files = files[np.char.find(files, '.csv') > 0]
         nExit = np.size(files)
         files = np.hstack((files, 'Exit'))
-        print('These files are availble in the current working directory:')
+        print('These files are available in the current working directory:')
         fileChoice = displayMenu(files) - 1
 
         if fileChoice == nExit:
