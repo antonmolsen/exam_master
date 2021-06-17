@@ -14,6 +14,8 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
     minHeight = min(height)
     maxHeight = max(height)
     dHeigth = maxHeight - minHeight
+
+
     
     if dHeigth == 0: # Is nessesary to be able to plot without loads
         minHeight = -1
@@ -49,6 +51,7 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
     plt.ylim([minHeight - dHeigth*0.25, maxHeight + dHeigth*0.25])
     plt.xlabel('Length [m]')
     plt.ylabel('Deflection [m]')
+    plt.plot([], [], ' ', label="maximum deflection is {:.2E}".format(dHeigth))
     plt.legend()
     plt.show()
     print(weights.to_string(index = False)) # Shows the details of the current loads.
