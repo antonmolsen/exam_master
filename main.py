@@ -141,7 +141,7 @@ while True:
                     try:
                         if len(df.loadPosition) == 0:
                             raise EmptyDF("There are currently no load forces on the beam.")
-                            
+
                         print("The forces are: \n")
                         temp = {'': [], 'Forces [N]': [], 'Positions [m]': []}
                         weights = pd.DataFrame(data=temp)
@@ -160,21 +160,22 @@ while True:
 
                         removed_forces = np.fromstring(
                             removed_forces.upper().replace("W", ""), dtype=int, sep=',')
+                        removed_forces = np.fromstring(removed_forces.upper().replace("W", ""), dtype=int, sep=',')
 
                         if np.any(removed_forces < 1) or np.any(removed_forces > np.size(lPositions)):
                             raise ValueOutOfBound('Please only choose loads from the list.')
-                        
+
                         df = dataRemove(df, removed_forces)
 
                         break
                     except ValueOutOfBound as error:
                         print(error)
-                    
+
                     except EmptyDF as error:
                         print(error)
                         break
 
-                    
+
 
             if loadChoice == 4:  # remove all loads
                 df = df.iloc[0:0]    

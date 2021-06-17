@@ -53,6 +53,7 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
     plt.ylabel('Deflection [m]')
     plt.plot([], [], ' ', label = "Maximum deflection is {:.2E}".format(dHeigth))
     plt.legend()
+    plt.tight_layout()
     plt.show()
 
     if len(loadPositions) == 0:
