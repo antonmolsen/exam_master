@@ -1,8 +1,5 @@
 import numpy as np
 
-# Input and menu functions
-
-
 def inputNumber(prompt):
     # The function takes a prompt and forces the user to write a number.
 

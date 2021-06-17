@@ -22,7 +22,7 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
     temp = {'':[],'Forces [N]':[], 'Positions [m]':[]}
     weights = pd.DataFrame(data = temp)
     
-    plt.plot(positions, height, 'r-')
+    plt.plot(positions, height, 'r-', label = "Beam")
     for i in range(np.size(loadPositions)):
         loadHeight = beamSuperposition(
             np.array([loadPositions[i]]), beamLength, loadPositions, loadForces, beamSupport)
@@ -37,6 +37,7 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
     plt.ylim([minHeight - dHeigth*0.25, maxHeight + dHeigth*0.25])
     plt.xlabel('Length [m]')
     plt.ylabel('Deflection [m]')
+    plt.legend()
     plt.show()
     print(weights.to_string(index = False))
     

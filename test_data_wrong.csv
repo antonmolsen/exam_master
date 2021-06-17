@@ -1,7 +1,7 @@
 loadPosition,forceVal,beamLength,beamSupport
 30,30,50,both
 40,40,,
-10,10,
-20,20,,
-300,30,,
+should not be text here,10,
+20,20,.
+,30,,
 34,34,,

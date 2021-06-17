@@ -21,9 +21,9 @@ df = pd.DataFrame({"loadPosition": [],"forceVal": []})
 beamLength = 10
 beamSupport = "both"
 
-print('Initial 10 meter beam of support-type "both" loaded ')
-
 while True:
+    print('\nCurrent beam is {} meters of supporttype "{}"'.format(beamLength,beamSupport))
+
     menuItems = np.array(["Configure beam", "Configure loads",
                           "Save beam and loads", "Load beam and loads", "Generate plot", "Quit"])
     mainChoice = displayMenu(menuItems)
@@ -33,7 +33,6 @@ while True:
             try:
                 init_beam_sup = beamSupport
                 init_beam_len = beamLength
-
                 beamLength = float(input("Please enter the length of beam in meters: "))
                 if beamLength <= 0:
                     raise
@@ -50,8 +49,9 @@ while True:
                         "Your new beam is shorter than some of the current load positions. \nDo you wish to enter your new beam, and therefore remove the loads that are out of bounds? y/n?: ", "yn")
                     if ans == "y":  # yes - we remove loads above new length
                         df_bool = df.loadPosition > beamLength
-                        removal_indexes = df.index.values[df_bool]
+                        removal_indexes = df.index.values[df_bool] +1
                         df = dataRemove(df, removal_indexes)
+                        break
 
                     elif ans == "n":  # no - go back to main menu
                         beamLength = init_beam_len
