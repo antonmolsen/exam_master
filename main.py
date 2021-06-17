@@ -47,10 +47,10 @@ while True:
     mainChoice = displayMenu(menuItems)
     
     if mainChoice == 1:  # Configure beam
+        init_beam_sup = beamSupport
+        init_beam_len = beamLength
         while True:
             try:
-                init_beam_sup = beamSupport
-                init_beam_len = beamLength
                 beamLength = float(input("Please enter the length of beam in meters: "))
                 if beamLength <= 0:
                     raise ValueOutOfBound("Beam must be a positive value")
@@ -158,8 +158,7 @@ while True:
                         removed_forces = inputString(
                             'Please enter a list of the forces you wish to remove, e.g. "W1,W2" (enter nothing to go back): ', 'wW1234567890, ')
 
-                        removed_forces = np.fromstring(
-                            removed_forces.upper().replace("W", ""), dtype=int, sep=',')
+                        removed_forces = np.fromstring(removed_forces.upper().replace("W", ""), dtype=int, sep=',')
 
                         if np.any(removed_forces < 1) or np.any(removed_forces > np.size(lPositions)):
                             raise ValueOutOfBound('Please only choose loads from the list.')
