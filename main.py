@@ -102,8 +102,12 @@ while True:
 
                         if load_pos < 0 or load_pos > beamLength:  # must not be longer than length of beam
                             raise
-                        # load position and load force is appended to df
+
                         force_val = float(inputNumber("Enter the force at the position: "))
+                        if force_val < 0:  # force must not be negative, since we do
+                            # not know if the given formulas are valid in that case.
+                            raise
+
                         df = df.append({"loadPosition": load_pos,
                                         "forceVal": force_val}, ignore_index=True)
                         break
