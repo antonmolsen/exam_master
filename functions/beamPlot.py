@@ -15,6 +15,10 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
     maxHeight = max(height)
     dHeigth = maxHeight - minHeight
     
+    if dHeigth == 0:
+        minHeight = 1
+        maxHeight = -1
+    
     temp = {'':[],'Forces [N]':[], 'Positions [m]':[]}
     weights = pd.DataFrame(data = temp)
     
