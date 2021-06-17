@@ -9,13 +9,15 @@ from functions.beamPlot import beamPlot
 from functions.dataLoad import dataLoad
 from functions.dataRemove import dataRemove
 
-# Main script
+# Main script #
 
-# can only run one beam at a time
+# Main script for calculations and plots of beam deflection. The user is able to configure a
+# new beam if she wishes. The user can also load/save data (as csv). If read data is erroneous
+# the program will read the correct data, and remove the erroneous parts. The program can only
+# run one beam at a time, and will tell the user if she has loads out of bounds of the new beam.
 
 # Initial conditions
-df = pd.DataFrame({"loadPosition": [],
-                   "forceVal": []})
+df = pd.DataFrame({"loadPosition": [],"forceVal": []})
 beamLength = 10
 beamSupport = "both"
 
@@ -49,7 +51,6 @@ while True:
                     if ans == "y":  # yes - we remove loads above new length
                         df_bool = df.loadPosition > beamLength
                         removal_indexes = df.index.values[df_bool]
-
                         df = dataRemove(df, removal_indexes)
 
                     elif ans == "n":  # no - go back to main menu
@@ -167,7 +168,7 @@ while True:
                 f.write(s)
                 f.close()
                 cwd = os.getcwd()
-                print('File saved as "{}" in "{}"'.format(saving_filename, cwd))
+                print('File saved as "{}" in "{}"'.format(saving_filename + ".csv", cwd))
 
                 break
             except:
