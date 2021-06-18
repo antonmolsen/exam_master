@@ -16,28 +16,29 @@ def dataLoad(filename):
     )
         
     data = [0, 0]
-    read = True # Initial condition is that all data is read.
-    temp_file = pd.read_csv(filename)  # Delimiter is whitespace
+    read = True # Initial condition is that all data is correct.
+    temp_file = pd.read_csv(filename)
 
-    arr = np.array(temp_file[['loadPosition', 'forceVal']])  # Numpy array, every row is true
+    arr = np.array(temp_file[['loadPosition', 'forceVal']])  # Saves the load positions and load forces as a vector.
     for i in range(len(arr[:, 1])):  # Length of dataset
         if not (np.isnan(arr[i, :]).any() == True):
-            # Temperature boundary in 0'th collumn
+            # If the load positions are out of the bounds og the beamlength
             if arr[i, 0] < 0 or arr[i, 0] > beamLength:
                 read = False
                 print("Load {} out of range of beam length.".format(i + 1))
 
-            if arr[i, 1] < 0:  # Growth rate in 1'st collumn
+            if arr[i, 1] < 0:  # If the load force is negative
                 read = False
                 print("Load {} has weight under 0".format(i + 1))
-    
-            if read:  # We then stack i'th array on to the dataset
+            
+            # We then stack i'th array on to the dataset if it doesn't have faulty data
+            if read:  
                 data = np.vstack((data, arr[i]))
             else:
                 print('Load {} removed.'.format(i + 1))
         else:
             print('No load positions or load forces detected.')
-        read = True  # We reset all to true when false ones arent read
+        read = True
 
 
     data = np.delete(data, 0, axis=0)  # Removal of initial [0, 0] array
