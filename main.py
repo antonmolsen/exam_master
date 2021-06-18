@@ -106,16 +106,18 @@ while True:
             loadChoice = displayMenu(loadItems)
 
             if loadChoice == 1:  # See current loads
-                if sum(df.loadPosition) == 0:
+                if np.nansum(np.array(df.loadPosition)) == 0:
                     print("There are currently no load forces on the beam.")
                     pass
                 else:
                     print("The current loads and forces are: \n")
 
+
                     temp = {'': [], 'Forces [N]': [], 'Positions [m]': []}
                     weights = pd.DataFrame(data=temp)
                     lPositions = np.array(df.loadPosition)
                     fVal = np.array(df.forceVal)
+
 
                     for i in range(np.size(lPositions)):
                         weights = weights.append(
