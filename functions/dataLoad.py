@@ -42,6 +42,7 @@ def dataLoad(filename):
 
     data = np.delete(data, 0, axis=0)  # Removal of initial [0, 0] array
 
+    # If there is no load data in the imported .csv file the function returns an empty dataframe
     if np.size(data) == 1:
         dataF = pd.DataFrame({"loadPosition": [], "forceVal": []})
 
