@@ -9,6 +9,7 @@ from functions.beamPlot import beamPlot
 from functions.dataLoad import dataLoad
 from functions.dataRemove import dataRemove
 
+
 # Main script #
 
 # Main script for calculations and plots of beam deflection. The user is able to configure a
@@ -17,17 +18,21 @@ from functions.dataRemove import dataRemove
 # run one beam at a time, and will tell the user if she has loads out of bounds of the new beam.
 
 # Custom errors
+
 class Error(Exception):
     # Base for other custom errors
     pass
+
 
 class ValueOutOfBound(Error):
     # Error for when a value is out of bounds
     pass
 
+
 class EmptyDF(Error):
     # Error when the user tries to work with / display a empty DataFrame
     pass
+
 
 class FileOverwriteError(Error):
     # Error when the user tries to overwrite a already existing file
@@ -35,17 +40,17 @@ class FileOverwriteError(Error):
 
 
 # Initial conditions
-df = pd.DataFrame({"loadPosition": [],"forceVal": []})
+df = pd.DataFrame({"loadPosition": [], "forceVal": []})
 beamLength = 10
 beamSupport = "both"
 
 while True:
-    print('\nCurrent beam is {} meters of support type "{}"'.format(beamLength,beamSupport))
+    print('\nCurrent beam is {} meters of support type "{}"'.format(beamLength, beamSupport))
 
     menuItems = np.array(["Configure beam", "Configure loads",
                           "Save beam and loads", "Load beam and loads", "Generate plot", "Quit"])
     mainChoice = displayMenu(menuItems)
-    
+
     if mainChoice == 1:  # Configure beam
         init_beam_sup = beamSupport
         init_beam_len = beamLength
@@ -64,10 +69,12 @@ while True:
 
                 if np.array(beamLength < df.loadPosition).any():
                     ans = inputString(
-                        "Your new beam is shorter than some of the current load positions. \nDo you wish to enter your new beam, and therefore remove the loads that are out of bounds? y/n?: ", "yn")
+                        "Your new beam is shorter than some of the current load positions. \nDo you wish to enter "
+                        "your new beam, and therefore remove the loads that are out of bounds? y/n?: ",
+                        "yn")
                     if ans == "y":  # yes - we remove loads above new length
                         df_bool = df.loadPosition > beamLength
-                        removal_indexes = df.index.values[df_bool] +1
+                        removal_indexes = df.index.values[df_bool] + 1
                         df = dataRemove(df, removal_indexes)
                         break
 
@@ -111,7 +118,8 @@ while True:
 
                     for i in range(np.size(lPositions)):
                         weights = weights.append(
-                            {'': 'W{}'.format(i + 1), 'Forces [N]': fVal[i], 'Positions [m]': lPositions[i]}, ignore_index=True)
+                            {'': 'W{}'.format(i + 1), 'Forces [N]': fVal[i], 'Positions [m]': lPositions[i]},
+                            ignore_index=True)
 
                     print(weights.to_string(index=False), '\n')
 
@@ -156,7 +164,9 @@ while True:
 
                         # removal of forces from string input
                         removed_forces = inputString(
-                            'Please enter a list of the forces you wish to remove, e.g. "W1,W2" (enter nothing to go back): ', 'wW1234567890, ')
+                            'Please enter a list of the forces you wish to remove, e.g. "W1,W2" (enter nothing to go '
+                            'back): ',
+                            'wW1234567890, ')
 
                         removed_forces = np.fromstring(removed_forces.upper().replace("W", ""), dtype=int, sep=',')
 
@@ -173,12 +183,8 @@ while True:
                         print(error)
                         break
 
-
-
             if loadChoice == 4:  # remove all loads
-                df = df.iloc[0:0]    
-                # df.loadPosition = 0
-                # df.forceVal = 0
+                df = df.iloc[0:0]
                 print("All loads removed successfully")
 
             if loadChoice == 5:  # Go to main menu
