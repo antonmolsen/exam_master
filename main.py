@@ -9,9 +9,6 @@ from functions.beamPlot import beamPlot
 from functions.dataLoad import dataLoad
 from functions.dataRemove import dataRemove
 
-
-# Main script #
-
 # Main script for calculations and plots of beam deflection. The user is able to configure a
 # new beam if she wishes. The user can also load/save data (as csv). If read data is erroneous
 # the program will read the correct data, and remove the erroneous parts. The program can only
@@ -44,6 +41,8 @@ df = pd.DataFrame({"loadPosition": [], "forceVal": []})
 beamLength = 10
 beamSupport = "both"
 
+# Main script #
+
 while True:
     print('\nCurrent beam is {} meters of support type "{}"'.format(beamLength, beamSupport))
 
@@ -51,7 +50,7 @@ while True:
                           "Save beam and loads", "Load beam and loads", "Generate plot", "Quit"])
     mainChoice = displayMenu(menuItems)
 
-    if mainChoice == 1:  # Configure beam
+    if mainChoice == 1: # Configure beam
 
         init_beam_sup = beamSupport
         init_beam_len = beamLength
@@ -93,7 +92,6 @@ while True:
                 print('Please enter a valid number')
 
         print("Beam loaded")
-        # first row of dataframe is reserved for beam information
 
     if mainChoice == 2:  # Configure loads
         while True:
@@ -106,18 +104,16 @@ while True:
             loadChoice = displayMenu(loadItems)
 
             if loadChoice == 1:  # See current loads
-                if np.nansum(np.array(df.loadPosition)) == 0:
+                if np.nansum(np.array(df.loadPosition)) == 0: #print if there are no forces present
                     print("There are currently no load forces on the beam.")
                     pass
                 else:
                     print("The current loads and forces are: \n")
 
-
                     temp = {'': [], 'Forces [N]': [], 'Positions [m]': []}
                     weights = pd.DataFrame(data=temp)
                     lPositions = np.array(df.loadPosition)
                     fVal = np.array(df.forceVal)
-
 
                     for i in range(np.size(lPositions)):
                         weights = weights.append(
@@ -126,13 +122,13 @@ while True:
 
                     print(weights.to_string(index=False), '\n')
 
-            if loadChoice == 2:  # Add a load
+            if loadChoice == 2: # Add a load
                 while True:
                     try:
                         load_pos = float(inputNumber(
                             "Enter position of load in meters (beam is {} meters): ".format(beamLength)))
 
-                        if load_pos < 0 or load_pos > beamLength:  # must not be longer than length of beam
+                        if load_pos < 0 or load_pos > beamLength:  # load position must not be longer than length of beam
                             raise ValueOutOfBound('Your load position can not be out of range of the beam.')
 
                         force_val = float(inputNumber("Enter the force at the position: "))
@@ -245,6 +241,6 @@ while True:
 
         print("Beam plot created successfully")
 
-    if mainChoice == 6:  # exits program
+    if mainChoice == 6:  # Exit program
         print("Program closed")
         break

@@ -42,7 +42,7 @@ def dataLoad(filename):
 
     data = np.delete(data, 0, axis=0)  # removal of initial [0, 0] array
 
-    if len(data) == 1:
+    if np.size(data) == 1:
         dataF = pd.DataFrame({"loadPosition": [], "forceVal": []})
 
     else:
