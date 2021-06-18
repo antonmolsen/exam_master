@@ -35,7 +35,7 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
         
         weights = weights.append({'':'W{}'.format(i + 1),'Forces [N]':loadForces[i], 'Positions [m]':loadPositions[i]}, ignore_index=True)
 
-    
+    # Plots anchorpoint(s)
     if beamSupport == 'both':
         plt.plot([positions[0], positions[-1]],[height[0], height[-1]], 'ok', label='Anchor points')
         
