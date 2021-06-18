@@ -15,14 +15,14 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
     maxHeight = max(height)
     dHeigth = maxHeight - minHeight
     
-    if dHeigth == 0: # Is nessesary to be able to plot without loads
+    if dHeigth == 0: # Is necessary to be able to plot without loads
         minHeight = -1
         maxHeight = 1
     
-    temp = {'':[],'Forces [N]':[], 'Positions [m]':[]} # Makes a dataframe to display loads.
-    weights = pd.DataFrame(data = temp)
+    temp = {'':[], 'Forces [N]':[], 'Positions [m]':[]} # Makes a dataframe to display loads.
+    weights = pd.DataFrame(data=temp)
     
-    plt.plot(positions, height, 'r-', label = "{:.2E} m beam".format(beamLength))
+    plt.plot(positions, height, 'r-', label="{:.2E} m beam".format(beamLength))
     
     for i in range(np.size(loadPositions)):
         # Plots text and arrows to show the load position. They all scale with the size of the plot.
@@ -37,19 +37,19 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
 
     # Plots anchorpoint(s)
     if beamSupport == 'both':
-        plt.plot([positions[0], positions[-1]],[height[0], height[-1]], 'ok', label = 'Anchorpoints')
+        plt.plot([positions[0], positions[-1]],[height[0], height[-1]], 'ok', label='Anchor points')
         
     elif beamSupport == 'cantilever':
-        plt.plot(positions[0],height[0], 'ok', label = 'Anchorpoint')
+        plt.plot(positions[0],height[0], 'ok', label = 'Anchor point')
         
 
 
     plt.title('Beam deflection with support type: {:s}'.format(beamSupport),fontsize = 16)
     plt.xlim([-beamLength*(1/10), beamLength*(11/10)])
     plt.ylim([minHeight - dHeigth*0.25, maxHeight + dHeigth*0.5])
-    plt.xlabel('Length [m]', fontsize = 14)
-    plt.ylabel('Deflection [m]', fontsize = 14)
-    plt.plot([], [], ' ', label = "Maximum deflection is {:.2E} m".format(dHeigth))
+    plt.xlabel('Length [m]', fontsize=14)
+    plt.ylabel('Deflection [m]', fontsize=14)
+    plt.plot([], [], ' ', label="Maximum deflection is {:.2E} m".format(dHeigth))
     plt.legend()
     plt.tight_layout()
     plt.show()
