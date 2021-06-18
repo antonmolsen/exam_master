@@ -11,7 +11,6 @@ def inputNumber(prompt):
             pass
     return num
 
-
 def displayMenu(options):
     # The function has the menu items as a numpy array as input. It displays
     # the options and makes the user choose one of them. If the user inputs 0
@@ -34,7 +33,6 @@ def displayMenu(options):
             print('Please chose a number from the list: ')
 
     return choice
-
 
 def inputString(prompt, acceptable):
     # The function takes a prompt and a string of acceptable characters and

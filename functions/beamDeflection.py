@@ -20,7 +20,7 @@ def beamDeflection(positions, beamLength, loadPosition, loadForce, beamSupport):
     geq_a_pos = x[positions >= a]
 
     if beamSupport == "both":
-        #we sort in values lower than a or greater than or equal to a
+        #we sort between values <a or >=a
 
         y_within_l = (W * (l - a) * less_a_pos / (6 * E * I * l)) * (l ** 2 - less_a_pos ** 2 - (l - a) ** 2)
         y_outer_l = (W * a * (l - geq_a_pos) / (6 * E * I * l)) * (l ** 2 - (l - geq_a_pos) ** 2 - a ** 2)

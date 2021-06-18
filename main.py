@@ -52,6 +52,7 @@ while True:
     mainChoice = displayMenu(menuItems)
 
     if mainChoice == 1:  # Configure beam
+
         init_beam_sup = beamSupport
         init_beam_len = beamLength
         while True:
@@ -193,9 +194,12 @@ while True:
     if mainChoice == 3:  # Save beam and loads
         while True:
             try:
-                saving_filename = input("What do you wish to name your file ?: ")
+                saving_filename = input("What do you wish to name your file?: (write nothing to go back) \nFile will be saved as .csv ")
                 df_for_saving = df
                 # if file exists the user should rename the file
+                if saving_filename == "":
+                    break
+
                 if os.path.isfile(saving_filename + ".csv"):
                     raise FileOverwriteError('File already exists. Please enter another filename')
                 df_for_saving.insert(2, "beamLength", np.nan, False)

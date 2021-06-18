@@ -6,7 +6,7 @@ from functions.beamSuperposition import *
 
 def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
     # Function to create plot of current beam with current loads.
-    # To prevent the plot from being too filled with loaddata, information 
+    # To prevent the plot from being too filled with load data, information
     # about each load are displayed as "w1", "w2", etc. in the console.
 
     positions = np.arange(0, beamLength, beamLength/2000)
@@ -61,5 +61,4 @@ def beamPlot(beamLength, loadPositions, loadForces, beamSupport):
 
     else:
         print(weights.to_string(index = False)) # Shows the details of the current loads.
-    
-    
+
