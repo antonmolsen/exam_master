@@ -10,6 +10,10 @@ def dataLoad(filename):
     df = pd.read_csv(filename)
     beamLength = df.at[0, 'beamLength']
     beamSupport = df.at[0, 'beamSupport']
+
+    print(
+        "Beam length and beam support type loaded."
+    )
         
     data = [0, 0]
     read = True # Initial condition is that all data is read.
@@ -17,7 +21,7 @@ def dataLoad(filename):
 
     arr = np.array(temp_file[['loadPosition', 'forceVal']])  # numpy array, every row is true
     for i in range(len(arr[:, 1])):  # length of dataset
-        if not (np.isnan(arr[i, :]).any == True) :
+        if not (np.isnan(arr[i, :]).any() == True):
             # temperature boundary in 0'th collumn
             if arr[i, 0] < 0 or arr[i, 0] > beamLength:
                 read = False
@@ -31,12 +35,17 @@ def dataLoad(filename):
                 data = np.vstack((data, arr[i]))
             else:
                 print('Load {} removed.'.format(i + 1))
-            
         else:
-            print('Either load position or load force missing. Data removed.')
-
+            print('No load positions or load forces detected.')
         read = True  # we reset all to true when false ones arent read
+
+
     data = np.delete(data, 0, axis=0)  # removal of initial [0, 0] array
-    dataF = pd.DataFrame(data, columns = ['loadPosition', 'forceVal'])
+
+    if len(data) == 1:
+        dataF = pd.DataFrame({"loadPosition": [], "forceVal": []})
+
+    else:
+        dataF = pd.DataFrame(data, columns = ['loadPosition', 'forceVal'])
 
     return dataF, beamLength, beamSupport
