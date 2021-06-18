@@ -6,21 +6,21 @@ def beamDeflection(positions, beamLength, loadPosition, loadForce, beamSupport):
     # the beam. Returns a vector with deflections at the given positions.
 
 
-    # initial constants
+    # Initial constants
     E = 200*10**9 # Newton per meters squared
     I = 1*10**(-3) # Meters to the fourth power
 
-    #input parameters and units
-    x = positions # vector with elements of unit: meters
-    l = beamLength # meters
-    a = loadPosition # meters
-    W = loadForce # newton
+    # Input parameters and units
+    x = positions # Vector with elements of unit: meters
+    l = beamLength # Meters
+    a = loadPosition # Meters
+    W = loadForce # Newton
 
+    # We sort between values <ca or >= a
     less_a_pos = x[positions < a]
     geq_a_pos = x[positions >= a]
 
     if beamSupport == "both":
-        #we sort between values <a or >=a
 
         y_within_l = (W * (l - a) * less_a_pos / (6 * E * I * l)) * (l ** 2 - less_a_pos ** 2 - (l - a) ** 2)
         y_outer_l = (W * a * (l - geq_a_pos) / (6 * E * I * l)) * (l ** 2 - (l - geq_a_pos) ** 2 - a ** 2)
