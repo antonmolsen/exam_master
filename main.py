@@ -181,22 +181,27 @@ while True:
             try:
                 saving_filename = input("What do you wish to name your file?: (write nothing to go back) \nFile will "
                                         "be saved as .csv ")
+                
+                # Temporary DataFrame which format is changed for saving in a
+                # .csv file.
                 df_for_saving = df
-                # if file exists the user should rename the file
+                
                 if saving_filename == "":
                     break
-
+                
+                # If file exists the user should rename the file
                 if os.path.isfile(saving_filename + ".csv"):
                     raise FileOverwriteError('File already exists. Please enter another filename. ')
+                
                 df_for_saving.insert(2, "beamLength", np.nan, False)
                 df_for_saving.insert(3, "beamSupport", '', False)
 
                 df_for_saving.at[0, "beamLength"] = beamLength
                 df_for_saving.at[0, "beamSupport"] = beamSupport
 
-                # file shall not overwrite old file
+                # Saves the DataFrame in a .csv file 
                 s = df_for_saving.to_csv(index=False)
-                f = open(saving_filename + ".csv", "w")  # write
+                f = open(saving_filename + ".csv", "w")
                 f.write(s)
                 f.close()
                 cwd = os.getcwd()
@@ -207,6 +212,8 @@ while True:
                 print(error)
 
     if mainChoice == 4:  # Load beam and loads
+        # Makes the user choose between the files in the cwd that has .csv in
+        # it's name. Makes the last option an exit to main menu.
         files = np.array(os.listdir(os.getcwd()))
         files = files[np.char.find(files, '.csv') > 0]
         nExit = np.size(files)

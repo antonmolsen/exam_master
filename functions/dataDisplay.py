@@ -1,8 +1,9 @@
 import pandas as pd
 import numpy as np
 def dataDisplay(df):
-    #function that displays current forces in a dataframe in python console. Takes only dataframe as input
-    # prints in console, therefore returns no value or variable
+    # Function that displays current forces in a dataframe in python console.
+    # Takes only dataframe as input prints in console, therefore returns no
+    # value or variable
 
     temp = {'': [], 'Forces [N]': [], 'Positions [m]': []}
     weights = pd.DataFrame(data=temp)
