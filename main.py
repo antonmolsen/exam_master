@@ -8,6 +8,7 @@ from functions.beamSuperposition import beamSuperposition
 from functions.beamPlot import beamPlot
 from functions.dataLoad import dataLoad
 from functions.dataRemove import dataRemove
+from functions.dataDisplay import dataDisplay
 
 # Main script for calculations and plots of beam deflection. The user is able to configure a
 # new beam if she wishes. The user can also load/save data (as csv). If read data is erroneous
@@ -51,7 +52,6 @@ while True:
     mainChoice = displayMenu(menuItems)
 
     if mainChoice == 1: # Configure beam
-
         init_beam_sup = beamSupport
         init_beam_len = beamLength
         while True:
@@ -81,7 +81,7 @@ while True:
                         df = dataRemove(df, removal_indexes)
                         break
 
-                    elif ans == "n":  # no - go back to main menu
+                    elif ans == "n":  # no - go back to main menu and reset to initial beamLength and beamSupport
                         beamLength = init_beam_len
                         beamSupport = init_beam_sup
                         print("Going back to main menu.")
@@ -98,7 +98,7 @@ while True:
 
     if mainChoice == 2:  # Configure loads
         while True:
-            
+
             # Displays menu
             print('\nCurrent beam is {} meters of support type "{}"'.format(beamLength, beamSupport))
 
@@ -114,17 +114,8 @@ while True:
                 else: # Else print make and print a table of the current load
                     print("The current loads and forces are: \n")
 
-                    temp = {'': [], 'Forces [N]': [], 'Positions [m]': []}
-                    weights = pd.DataFrame(data=temp)
-                    lPositions = np.array(df.loadPosition)
-                    fVal = np.array(df.forceVal)
+                    dataDisplay(df)
 
-                    for i in range(np.size(lPositions)):
-                        weights = weights.append(
-                            {'': 'W{}'.format(i + 1), 'Forces [N]': fVal[i], 'Positions [m]': lPositions[i]},
-                            ignore_index=True)
-
-                    print(weights.to_string(index=False), '\n')
 
             if loadChoice == 2: # Add a load
                 while True:
@@ -139,7 +130,7 @@ while True:
                         if force_val < 0:  # Force must not be negative, since we don't
                             # know if the given formulas are valid in that case.
                             raise ValueOutOfBound('Your force must be positive.')
-                            
+
                         # Adds the new data to the end of the load DataFrame
                         df = df.append({"loadPosition": load_pos,
                                         "forceVal": force_val}, ignore_index=True)
@@ -155,16 +146,7 @@ while True:
                             raise EmptyDF("There are currently no load forces on the beam.")
 
                         print("The forces are: \n")
-                        temp = {'': [], 'Forces [N]': [], 'Positions [m]': []}
-                        weights = pd.DataFrame(data=temp)
-                        lPositions = np.array(df.loadPosition)
-                        fVal = np.array(df.forceVal)
-                        for i in range(np.size(lPositions)):
-                            weights = weights.append(
-                                {'': 'W{}'.format(
-                                    i + 1), 'Forces [N]': fVal[i], 'Positions [m]': lPositions[i]},
-                                ignore_index=True)
-                        print(weights.to_string(index=False), '\n')
+                        dataDisplay(df)
 
                         # Removal of forces from string input
                         removed_forces = inputString(
@@ -189,7 +171,7 @@ while True:
 
             if loadChoice == 4:  # remove all loads
                 df = df.iloc[0:0]
-                print("All loads removed successfully")
+                print("All loads removed successfully. ")
 
             if loadChoice == 5:  # Go to main menu
                 break
@@ -197,14 +179,15 @@ while True:
     if mainChoice == 3:  # Save beam and loads
         while True:
             try:
-                saving_filename = input("What do you wish to name your file?: (write nothing to go back) \nFile will be saved as .csv ")
+                saving_filename = input("What do you wish to name your file?: (write nothing to go back) \nFile will "
+                                        "be saved as .csv ")
                 df_for_saving = df
                 # if file exists the user should rename the file
                 if saving_filename == "":
                     break
 
                 if os.path.isfile(saving_filename + ".csv"):
-                    raise FileOverwriteError('File already exists. Please enter another filename')
+                    raise FileOverwriteError('File already exists. Please enter another filename. ')
                 df_for_saving.insert(2, "beamLength", np.nan, False)
                 df_for_saving.insert(3, "beamSupport", '', False)
 
@@ -217,7 +200,7 @@ while True:
                 f.write(s)
                 f.close()
                 cwd = os.getcwd()
-                print('Beam and load data saved as "{}" in "{}"'.format(saving_filename + ".csv", cwd))
+                print('Beam and load data saved as "{}" in "{}".'.format(saving_filename + ".csv", cwd))
 
                 break
             except FileOverwriteError as error:
@@ -239,12 +222,12 @@ while True:
 
             df, beamLength, beamSupport = dataLoad(filename)
 
-            print("Data loaded")
+            print("Data loaded.")
 
     if mainChoice == 5:  # Generate plot
         beamPlot(beamLength, np.array(df.loadPosition), np.array(df.forceVal), beamSupport)
 
-        print("Beam plot created successfully")
+        print("Beam plot created successfully.")
 
     if mainChoice == 6:  # Exit program
         print("Program closed")
