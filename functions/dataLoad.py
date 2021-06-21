@@ -11,9 +11,7 @@ def dataLoad(filename):
     beamLength = df.at[0, 'beamLength']
     beamSupport = df.at[0, 'beamSupport']
 
-    print(
-        "Beam length and beam support type loaded."
-    )
+    print("Beam length and beam support type loaded.")
         
     data = [0, 0]
     read = True # Initial condition is that all data is correct.

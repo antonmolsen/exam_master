@@ -67,7 +67,7 @@ while True:
                 elif supportChoice == 2:
                     beamSupport = "cantilever"
 
-                # If any of the already confingured loads become out of bounds
+                # If any of the already configured loads become out of bounds
                 # of the new beam the user gets the choice to remove them or
                 # go back to the original beam.
                 if np.array(beamLength < df.loadPosition).any():
@@ -116,14 +116,14 @@ while True:
 
                     dataDisplay(df)
 
-
-            if loadChoice == 2: # Add a load
+            if loadChoice == 2:  # Add a load
                 while True:
                     try:
                         load_pos = float(inputNumber(
                             "Enter position of load in meters (beam is {} meters): ".format(beamLength)))
 
-                        if load_pos < 0 or load_pos > beamLength:  # Load position must not be longer than length of beam
+                        if load_pos < 0 or load_pos > beamLength:  # Load position must not be longer than length of
+                        # beam
                             raise ValueOutOfBound('Your load position can not be out of range of the beam.')
 
                         force_val = float(inputNumber("Enter the force at the position: "))
@@ -156,7 +156,7 @@ while True:
 
                         removed_forces = np.fromstring(removed_forces.upper().replace("W", ""), dtype=int, sep=',')
 
-                        if np.any(removed_forces < 1) or np.any(removed_forces > np.size(lPositions)):
+                        if np.any(removed_forces < 1) or np.any(removed_forces > np.size(df.loadPosition)):
                             raise ValueOutOfBound('Please only choose loads from the list.')
 
                         df = dataRemove(df, removed_forces)
@@ -181,25 +181,25 @@ while True:
             try:
                 saving_filename = input("What do you wish to name your file?: (write nothing to go back) \nFile will "
                                         "be saved as .csv ")
-                
+
                 # Temporary DataFrame which format is changed for saving in a
                 # .csv file.
                 df_for_saving = df
-                
+
                 if saving_filename == "":
                     break
-                
+
                 # If file exists the user should rename the file
                 if os.path.isfile(saving_filename + ".csv"):
                     raise FileOverwriteError('File already exists. Please enter another filename. ')
-                
+
                 df_for_saving.insert(2, "beamLength", np.nan, False)
                 df_for_saving.insert(3, "beamSupport", '', False)
 
                 df_for_saving.at[0, "beamLength"] = beamLength
                 df_for_saving.at[0, "beamSupport"] = beamSupport
 
-                # Saves the DataFrame in a .csv file 
+                # Saves the DataFrame in a .csv file
                 s = df_for_saving.to_csv(index=False)
                 f = open(saving_filename + ".csv", "w")
                 f.write(s)
