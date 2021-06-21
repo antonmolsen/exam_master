@@ -67,6 +67,9 @@ while True:
                 elif supportChoice == 2:
                     beamSupport = "cantilever"
 
+                # If any of the already confingured loads become out of bounds
+                # of the new beam the user gets the choice to remove them or
+                # go back to the original beam.
                 if np.array(beamLength < df.loadPosition).any():
                     ans = inputString(
                         "Your new beam is shorter than some of the current load positions. \nDo you wish to enter "
@@ -95,7 +98,8 @@ while True:
 
     if mainChoice == 2:  # Configure loads
         while True:
-
+            
+            # Displays menu
             print('\nCurrent beam is {} meters of support type "{}"'.format(beamLength, beamSupport))
 
             loadItems = np.array(["See current loads", "Add a load",
@@ -104,10 +108,10 @@ while True:
             loadChoice = displayMenu(loadItems)
 
             if loadChoice == 1:  # See current loads
-                if np.nansum(np.array(df.loadPosition)) == 0: #print if there are no forces present
+                if np.nansum(np.array(df.loadPosition)) == 0: # Print if there are no forces present
                     print("There are currently no load forces on the beam.")
                     pass
-                else:
+                else: # Else print make and print a table of the current load
                     print("The current loads and forces are: \n")
 
                     temp = {'': [], 'Forces [N]': [], 'Positions [m]': []}
@@ -128,14 +132,15 @@ while True:
                         load_pos = float(inputNumber(
                             "Enter position of load in meters (beam is {} meters): ".format(beamLength)))
 
-                        if load_pos < 0 or load_pos > beamLength:  # load position must not be longer than length of beam
+                        if load_pos < 0 or load_pos > beamLength:  # Load position must not be longer than length of beam
                             raise ValueOutOfBound('Your load position can not be out of range of the beam.')
 
                         force_val = float(inputNumber("Enter the force at the position: "))
-                        if force_val < 0:  # force must not be negative, since we do
-                            # not know if the given formulas are valid in that case.
+                        if force_val < 0:  # Force must not be negative, since we don't
+                            # know if the given formulas are valid in that case.
                             raise ValueOutOfBound('Your force must be positive.')
-
+                            
+                        # Adds the new data to the end of the load DataFrame
                         df = df.append({"loadPosition": load_pos,
                                         "forceVal": force_val}, ignore_index=True)
                         break
@@ -143,7 +148,7 @@ while True:
                         print(error)
 
             if loadChoice == 3:  # Remove a load
-                # prints dataframe and the user can select which line to remove
+                # Prints dataframe and the user can select which line to remove
                 while True:
                     try:
                         if len(df.loadPosition) == 0:
@@ -161,7 +166,7 @@ while True:
                                 ignore_index=True)
                         print(weights.to_string(index=False), '\n')
 
-                        # removal of forces from string input
+                        # Removal of forces from string input
                         removed_forces = inputString(
                             'Please enter a list of the forces you wish to remove, e.g. "W1,W2" (enter nothing to go '
                             'back): ',
